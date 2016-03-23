@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="14F1605" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="0au-En-MRa">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="0au-En-MRa">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -58,7 +58,7 @@
                                     <constraint firstAttribute="height" constant="20" id="uR4-cF-5Ei"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="M25-kU-gwp">
@@ -71,9 +71,6 @@
                                 <state key="normal" title="ゲームをスタートする">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <connections>
-                                    <segue destination="1mg-TW-CIe" kind="push" id="UVk-g0-yx4"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -94,15 +91,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Gdh-up-TF7"/>
+                    <connections>
+                        <segue destination="1mg-TW-CIe" kind="push" identifier="goQuiz" id="lJD-fg-AIV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="274" y="300"/>
         </scene>
-        <!--View Controller-->
+        <!--Quiz Controller-->
         <scene sceneID="N4s-PE-0Rn">
             <objects>
-                <viewController id="1mg-TW-CIe" sceneMemberID="viewController">
+                <viewController id="1mg-TW-CIe" customClass="QuizController" customModule="TimerQuiz" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Hnh-We-pmd"/>
                         <viewControllerLayoutGuide type="bottom" id="0Bs-rV-UqH"/>
@@ -161,10 +161,9 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sn4-cD-ZbB">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="この中に問題文がはいります。問題文をよく読んで下のA〜Dのボタンから回答をしてください。問題数は計5問がランダムで出題されます。途中でゲームをやめる場合は右上のBackボタンから戻って下さい。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sn4-cD-ZbB">
                                 <rect key="frame" x="20" y="204" width="560" height="260"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -178,13 +177,13 @@
                                 <color key="textColor" red="1" green="0.59999999999999998" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="下の (?) に入る数字を下の4つから選んで下さい。" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CT6-sh-M8e">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="下の問題文を読んで、正しいものを選びなさい。" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CT6-sh-M8e">
                                 <rect key="frame" x="20" y="132" width="560" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="mxf-we-uJo"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uec-aT-8XU">
@@ -225,7 +224,7 @@
                                     <constraint firstAttribute="height" constant="20" id="ZFS-Zo-q5r"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -285,17 +284,17 @@
                     </view>
                     <navigationItem key="navigationItem" id="DmY-LW-3aL"/>
                     <connections>
-                        <segue destination="1nq-vw-h9g" kind="push" id="jqg-Ti-qCh"/>
+                        <segue destination="1nq-vw-h9g" kind="push" identifier="goResult" id="jqg-Ti-qCh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JQO-Lj-I7K" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="957" y="300"/>
         </scene>
-        <!--View Controller-->
+        <!--Score Controller-->
         <scene sceneID="p8k-II-V9K">
             <objects>
-                <viewController id="1nq-vw-h9g" sceneMemberID="viewController">
+                <viewController id="1nq-vw-h9g" customClass="ScoreController" customModule="TimerQuiz" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="kzQ-ME-Blj"/>
                         <viewControllerLayoutGuide type="bottom" id="fld-vc-WIp"/>
@@ -322,7 +321,7 @@
                                 <rect key="frame" x="20" y="216" width="560" height="306"/>
                                 <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="残りあと300秒" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i89-0t-uZp">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10問中10問正解！" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i89-0t-uZp">
                                 <rect key="frame" x="20" y="132" width="560" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="aMm-Wm-zP4"/>
@@ -337,7 +336,7 @@
                                     <constraint firstAttribute="height" constant="20" id="Jpc-4r-a46"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oy4-kz-CVe">
@@ -357,8 +356,8 @@
                                     <constraint firstAttribute="height" constant="28" id="008-hX-C9j"/>
                                 </constraints>
                                 <segments>
-                                    <segment title="First"/>
-                                    <segment title="Second"/>
+                                    <segment title="結果グラフ"/>
+                                    <segment title="スコア履歴"/>
                                 </segments>
                                 <color key="tintColor" red="0.80000000000000004" green="0.59999999999999998" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                             </segmentedControl>
