@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="guidanceCell" id="KGk-i7-Jjw" customClass="guidanceCell" customModule="TimerQuiz" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="58"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="57"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aho-i6-zpw">
+                        <rect key="frame" x="8" y="8" width="304" height="18"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="18" id="f6M-H3-ewM"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                        <color key="textColor" red="1" green="0.59999999999999998" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WZo-aO-DD1">
+                        <rect key="frame" x="8" y="28" width="304" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="WZo-aO-DD1" firstAttribute="top" secondItem="aho-i6-zpw" secondAttribute="bottom" constant="2" id="9ld-UF-S5g"/>
+                    <constraint firstItem="aho-i6-zpw" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="Br2-RL-F7Y"/>
+                    <constraint firstItem="WZo-aO-DD1" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="ThS-yj-C1D"/>
+                    <constraint firstItem="aho-i6-zpw" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="hb6-vX-Tts"/>
+                    <constraint firstItem="WZo-aO-DD1" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="oOE-Tw-FZJ"/>
+                    <constraint firstItem="aho-i6-zpw" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="y2l-VJ-drp"/>
+                    <constraint firstItem="WZo-aO-DD1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="yiG-ws-IkX"/>
+                </constraints>
+            </tableViewCellContentView>
+            <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+            <connections>
+                <outlet property="guidanceDescription" destination="WZo-aO-DD1" id="EQg-sN-58f"/>
+                <outlet property="guidanceTitle" destination="aho-i6-zpw" id="cQM-ch-gut"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>
