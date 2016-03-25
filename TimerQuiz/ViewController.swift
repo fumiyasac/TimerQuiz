@@ -13,7 +13,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     //Outlet接続をした部品
     @IBOutlet var guideTableView: UITableView!
     
-    //テーブルビューに入れておくメンバ変数
+    //テーブルビューに表示する文言の内容を入れておくメンバ変数
     var guidanceArray: NSMutableArray = []
     
     //セルカウント数とセクションカウント数

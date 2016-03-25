@@ -135,6 +135,9 @@
                                 <state key="normal" title="1. 12">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="answerActionOne:" destination="1mg-TW-CIe" eventType="touchUpInside" id="cGL-8r-TJq"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DuP-18-rdF">
                                 <rect key="frame" x="310" y="480" width="270" height="40"/>
@@ -145,6 +148,9 @@
                                 <state key="normal" title="B. 36">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="answerActionTwo:" destination="1mg-TW-CIe" eventType="touchUpInside" id="RAf-6n-9xo"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fek-wS-1pM">
                                 <rect key="frame" x="20" y="540" width="270" height="40"/>
@@ -155,6 +161,9 @@
                                 <state key="normal" title="C. 72">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="answerActionThree:" destination="1mg-TW-CIe" eventType="touchUpInside" id="Stv-vz-DtP"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Qj-zl-lyR">
                                 <rect key="frame" x="310" y="540" width="270" height="40"/>
@@ -165,6 +174,9 @@
                                 <state key="normal" title="D. 180">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="answerActionFour:" destination="1mg-TW-CIe" eventType="touchUpInside" id="NnF-oM-6wa"/>
+                                </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="この中に問題文がはいります。問題文をよく読んで下のA〜Dのボタンから回答をしてください。問題数は計5問がランダムで出題されます。途中でゲームをやめる場合は右上のBackボタンから戻って下さい。" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sn4-cD-ZbB">
                                 <rect key="frame" x="20" y="204" width="560" height="260"/>
@@ -289,7 +301,14 @@
                     </view>
                     <navigationItem key="navigationItem" id="DmY-LW-3aL"/>
                     <connections>
-                        <segue destination="1nq-vw-h9g" kind="push" identifier="goResult" id="jqg-Ti-qCh"/>
+                        <outlet property="answerButtonFour" destination="1Qj-zl-lyR" id="9Yt-o1-aXM"/>
+                        <outlet property="answerButtonOne" destination="6ae-wP-2lP" id="P9i-ig-Yc8"/>
+                        <outlet property="answerButtonThree" destination="Fek-wS-1pM" id="8cF-RB-pmK"/>
+                        <outlet property="answerButtonTwo" destination="DuP-18-rdF" id="b0o-ro-mHF"/>
+                        <outlet property="problemCountLabel" destination="4OS-2U-iGz" id="27X-8M-5zi"/>
+                        <outlet property="problemTextView" destination="sn4-cD-ZbB" id="0BP-wL-Pn8"/>
+                        <outlet property="timerDisplayLabel" destination="4Sn-5t-Q1i" id="xFu-wy-YLs"/>
+                        <segue destination="1nq-vw-h9g" kind="push" identifier="goScore" id="jqg-Ti-qCh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JQO-Lj-I7K" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -351,9 +370,12 @@
                                     <constraint firstAttribute="height" constant="40" id="vRE-JU-orM"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="はじめから">
+                                <state key="normal" title="サンプルの解説はこちら">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="goExplainHowtoAction:" destination="1nq-vw-h9g" eventType="touchUpInside" id="cQj-MJ-Er6"/>
+                                </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Z3R-km-5nT">
                                 <rect key="frame" x="20" y="170" width="560" height="29"/>
@@ -365,6 +387,9 @@
                                     <segment title="スコア履歴"/>
                                 </segments>
                                 <color key="tintColor" red="0.80000000000000004" green="0.59999999999999998" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <action selector="changeDataDisplayAction:" destination="1nq-vw-h9g" eventType="valueChanged" id="uH1-zY-2uQ"/>
+                                </connections>
                             </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -406,6 +431,12 @@
                         </variation>
                     </view>
                     <navigationItem key="navigationItem" id="VM7-8n-ees"/>
+                    <connections>
+                        <outlet property="analyticsSegmentControl" destination="Z3R-km-5nT" id="fh9-8W-hmE"/>
+                        <outlet property="resultDisplayLabel" destination="i89-0t-uZp" id="Eht-FK-RLT"/>
+                        <outlet property="resultGraphView" destination="Cq2-Mf-0hS" id="j1R-jq-kDy"/>
+                        <outlet property="resultHistoryTable" destination="hxX-If-92R" id="3Wf-6x-x0K"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xqe-DM-jeO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
