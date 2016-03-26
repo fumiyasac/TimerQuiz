@@ -21,6 +21,7 @@
 		DEBA90B01CA6565F006EB2B6 /* problem.csv in Resources */ = {isa = PBXBuildFile; fileRef = DEBA90AF1CA6565F006EB2B6 /* problem.csv */; };
 		DEBA90B31CA66F91006EB2B6 /* scoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBA90B11CA66F91006EB2B6 /* scoreCell.swift */; };
 		DEBA90B41CA66F91006EB2B6 /* scoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEBA90B21CA66F91006EB2B6 /* scoreCell.xib */; };
+		DEBA90B61CA713FF006EB2B6 /* Charts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DEBA90B51CA713FE006EB2B6 /* Charts.framework */; };
 		DED524AF1CA3017900D513F8 /* QuizController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED524AE1CA3017900D513F8 /* QuizController.swift */; };
 		DED524B11CA301B800D513F8 /* ScoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED524B01CA301B800D513F8 /* ScoreController.swift */; };
 		DED524B71CA3C48E00D513F8 /* guidanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED524B51CA3C48E00D513F8 /* guidanceCell.swift */; };
@@ -67,6 +68,7 @@
 		DEBA90AF1CA6565F006EB2B6 /* problem.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = problem.csv; sourceTree = "<group>"; };
 		DEBA90B11CA66F91006EB2B6 /* scoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = scoreCell.swift; sourceTree = "<group>"; };
 		DEBA90B21CA66F91006EB2B6 /* scoreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = scoreCell.xib; sourceTree = "<group>"; };
+		DEBA90B51CA713FE006EB2B6 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = "../../../Library/Developer/Xcode/DerivedData/TimerQuiz-aygpvpltbiollefgnboodthoadwt/Build/Products/Debug-iphoneos/Charts.framework"; sourceTree = "<group>"; };
 		DED524AE1CA3017900D513F8 /* QuizController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizController.swift; sourceTree = "<group>"; };
 		DED524B01CA301B800D513F8 /* ScoreController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreController.swift; sourceTree = "<group>"; };
 		DED524B51CA3C48E00D513F8 /* guidanceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = guidanceCell.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DEBA90B61CA713FF006EB2B6 /* Charts.framework in Frameworks */,
 				C3F478411B4C1E59F5A9338D /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +114,7 @@
 		D48E644D7F4CFCC06AD8FF30 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DEBA90B51CA713FE006EB2B6 /* Charts.framework */,
 				10BEF06C9085792427792642 /* Pods.framework */,
 			);
 			name = Frameworks;

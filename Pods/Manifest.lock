@@ -1,4 +1,7 @@
 PODS:
+  - Charts (2.2.3):
+    - Charts/Core (= 2.2.3)
+  - Charts/Core (2.2.3)
   - Realm (0.98.5):
     - Realm/Headers (= 0.98.5)
   - Realm/Headers (0.98.5)
@@ -6,9 +9,11 @@ PODS:
     - Realm (= 0.98.5)
 
 DEPENDENCIES:
+  - Charts
   - RealmSwift
 
 SPEC CHECKSUMS:
+  Charts: f54267bb3f0f0e74520c6f248517cf5074dfd6fc
   Realm: db08379969e45cea2edd1c3c0a090fe9e22d2d2f
   RealmSwift: cb11ad1c35e15dc982f2dbf5afe2a3124193a358
 

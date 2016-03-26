@@ -17,13 +17,13 @@ class GameScore: Object {
     //id
     dynamic private var id = 0
     
-    //音声で送信したデータ
+    //正解数（Int型）
     dynamic var correctAmount = 0
     
-    //音声で送信したデータ
-    dynamic var timeCount = 0.000
+    //正解までにかかった時間（String型）
+    dynamic var timeCount = ""
     
-    //登録日
+    //登録日（NSDate型）
     dynamic var createDate = NSDate(timeIntervalSince1970: 0)
     
     //PrimaryKeyの設定
@@ -38,7 +38,7 @@ class GameScore: Object {
         return gameScore
     }
     
-    //プライマリキーの作成メソッドå
+    //プライマリキーの作成メソッド
     static func getLastId() -> Int {
         if let gameScore = realm.objects(GameScore).last {
             return gameScore.id + 1
@@ -61,6 +61,7 @@ class GameScore: Object {
         for gameScore in gameScores {
             gameScoreList.append(gameScore)
         }
+        //print(gameScoreList)
         return gameScoreList
     }
 }

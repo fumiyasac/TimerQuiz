@@ -84,10 +84,12 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods/Charts.framework"
   install_framework "Pods/Realm.framework"
   install_framework "Pods/RealmSwift.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods/Charts.framework"
   install_framework "Pods/Realm.framework"
   install_framework "Pods/RealmSwift.framework"
 fi

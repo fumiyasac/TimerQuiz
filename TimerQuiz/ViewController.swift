@@ -77,12 +77,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     //TableViewに関する設定一覧（セクション数）
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return GuidanceTableStruct.cellCount
+        return GuidanceTableStruct.cellSectionCount
     }
     
     //TableViewに関する設定一覧（セクションのセル数）
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return GuidanceTableStruct.cellSectionCount
+        return GuidanceTableStruct.cellCount
     }
     
     //TableViewに関する設定一覧（セルに関する設定）

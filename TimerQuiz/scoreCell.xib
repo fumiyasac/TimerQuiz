@@ -19,8 +19,8 @@
                         <rect key="frame" x="8" y="8" width="90" height="18"/>
                         <color key="backgroundColor" red="1" green="0.59999999999999998" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="18" id="OV7-LY-z36"/>
-                            <constraint firstAttribute="width" constant="90" id="qFc-V2-LUC"/>
+                            <constraint firstAttribute="height" constant="18" id="4fq-dm-XNa"/>
+                            <constraint firstAttribute="width" constant="90" id="Kuc-Bo-syo"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="12"/>
                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -29,7 +29,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Sv-Lz-ZSM">
                         <rect key="frame" x="8" y="34" width="304" height="18"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="18" id="4sB-Tq-C5L"/>
+                            <constraint firstAttribute="height" constant="18" id="w88-q8-SKA"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -38,7 +38,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogn-Dm-s14">
                         <rect key="frame" x="8" y="53" width="304" height="18"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="18" id="FX1-eO-gbt"/>
+                            <constraint firstAttribute="height" constant="18" id="SpL-nP-eCS"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="13"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -46,16 +46,15 @@
                     </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="8Sv-Lz-ZSM" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="5lI-XA-bfr"/>
-                    <constraint firstItem="ogn-Dm-s14" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Cge-cg-V1y"/>
-                    <constraint firstItem="8Sv-Lz-ZSM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="DFN-3Q-Ccc"/>
-                    <constraint firstItem="JD1-0y-xg5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="HL2-bc-Plr"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="JD1-0y-xg5" secondAttribute="trailing" constant="214" id="KbM-Sf-4vM"/>
-                    <constraint firstItem="ogn-Dm-s14" firstAttribute="top" secondItem="8Sv-Lz-ZSM" secondAttribute="bottom" constant="1" id="L8p-tf-uF2"/>
-                    <constraint firstItem="ogn-Dm-s14" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="SX3-LY-HJe"/>
-                    <constraint firstItem="ogn-Dm-s14" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="WJG-TQ-Gxw"/>
-                    <constraint firstItem="JD1-0y-xg5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="kDP-fv-hyD"/>
-                    <constraint firstItem="8Sv-Lz-ZSM" firstAttribute="top" secondItem="JD1-0y-xg5" secondAttribute="bottom" constant="8" id="ueI-dK-5PW"/>
+                    <constraint firstItem="JD1-0y-xg5" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="5ek-dW-6ff"/>
+                    <constraint firstItem="8Sv-Lz-ZSM" firstAttribute="top" secondItem="JD1-0y-xg5" secondAttribute="bottom" constant="8" id="600-xp-GdM"/>
+                    <constraint firstItem="ogn-Dm-s14" firstAttribute="top" secondItem="8Sv-Lz-ZSM" secondAttribute="bottom" constant="1" id="C9V-wV-EnE"/>
+                    <constraint firstItem="ogn-Dm-s14" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="L1i-AZ-X5V"/>
+                    <constraint firstItem="ogn-Dm-s14" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="LH2-9D-wbx"/>
+                    <constraint firstItem="ogn-Dm-s14" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="NQX-eE-34L"/>
+                    <constraint firstItem="8Sv-Lz-ZSM" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="NUq-gT-yeb"/>
+                    <constraint firstItem="8Sv-Lz-ZSM" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="mLU-QR-3ae"/>
+                    <constraint firstItem="JD1-0y-xg5" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="pDz-Cp-oet"/>
                 </constraints>
             </tableViewCellContentView>
             <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>

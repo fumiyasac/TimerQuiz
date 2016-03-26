@@ -140,7 +140,7 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     func timerDone() {
         
         //10秒経過時は不正解として次の問題を読み込む
-        self.totalSeconds += QuizStruct.limitTimer
+        self.totalSeconds = self.totalSeconds + QuizStruct.limitTimer
         self.pastCounter = QuizStruct.defaultCounter
         
         switch self.counter {
@@ -190,7 +190,7 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
                 self.problemArray.addObject(parts)
             }
             
-            //配列をランダムにシャッフルして引数分だけを格納する(※Extension.swift参照)
+            //配列を引数分の要素をランダムにシャッフルする(※Extension.swift参照)
             self.problemArray.shuffle(QuizStruct.dataMaxCount)
             
             //配列の中に配列が入った状態にする
@@ -208,7 +208,7 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         //タイマーを破棄
         self.resetTimerCurrentController()
         
-        //@todo:結果表示ページへ遷移するか次の問題を表示する
+        //結果表示ページへ遷移するか次の問題を表示する
         self.compareNextProblemOrResultView()
     }
     
@@ -219,15 +219,15 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         let targetProblem: NSArray = self.problemArray[self.counter] as! NSArray
         
         //ラベルに表示されている値を変更する
-        //配列 → 0番目：問題文, 1番目：正解の番号, 2番目：Aの選択肢, 3番目：Bの選択肢, 4番目：Cの選択肢, 5番目：Dの選択肢
+        //配列 → 0番目：問題文, 1番目：正解の番号, 2番目：1番目の選択肢, 3番目：2番目の選択肢, 4番目：3番目の選択肢, 5番目：4番目の選択肢
         self.problemCountLabel.text = "第" + String(self.counter + 1) + "問"
         self.problemTextView.text = targetProblem[0] as! String
         
         //ボタンに選択肢を表示する
-        self.answerButtonOne.setTitle(targetProblem[2] as? String, forState: .Normal)
-        self.answerButtonTwo.setTitle(targetProblem[3] as? String, forState: .Normal)
-        self.answerButtonThree.setTitle(targetProblem[4] as? String, forState: .Normal)
-        self.answerButtonFour.setTitle(targetProblem[5] as? String, forState: .Normal)
+        self.answerButtonOne.setTitle("1." + String(targetProblem[2]), forState: .Normal)
+        self.answerButtonTwo.setTitle("2." + String(targetProblem[3]), forState: .Normal)
+        self.answerButtonThree.setTitle("3." + String(targetProblem[4]), forState: .Normal)
+        self.answerButtonFour.setTitle("4." + String(targetProblem[5]), forState: .Normal)
     }
     
     //選択された答えが正しいか誤りかを判定するメソッド
@@ -261,11 +261,11 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         }
         
         //合計時間に問題の回答時間を加算する
-        self.totalSeconds += self.tmpTimerCount
+        self.totalSeconds = self.totalSeconds + self.tmpTimerCount
         
         //該当の問題の回答番号を取得する
         let targetProblem: NSArray = self.problemArray[self.counter] as! NSArray
-        let targetAnswer: Int = targetProblem[1] as! Int
+        let targetAnswer: Int = Int(targetProblem[1] as! String)!
         
         //カウンターの値に+1をする
         self.counter += 1
@@ -290,12 +290,12 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
             //Realmに計算結果データを保存する
             let gameScoreObject = GameScore.create()
             gameScoreObject.correctAmount = self.correctProblemNumber
-            gameScoreObject.timeCount = self.totalSeconds
+            gameScoreObject.timeCount = NSString(format:"%.3f", self.totalSeconds) as String
             gameScoreObject.createDate = NSDate()
             gameScoreObject.save()
             
             //次のコントローラーへ遷移する
-            self.performSegueWithIdentifier("goQuiz", sender: nil)
+            self.performSegueWithIdentifier("goScore", sender: nil)
             
         } else {
             
@@ -324,8 +324,18 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
             
             //遷移先のコントローラーに渡したい変数を格納（型を合わせてね）
             scoreController.correctProblemNumber = self.correctProblemNumber
-            scoreController.totalSeconds = self.totalSeconds
+            scoreController.totalSeconds = NSString(format:"%.3f", self.totalSeconds) as String
+            
+            //計算結果を入れる変数を初期化
+            self.resetGameValues()
         }
+    }
+    
+    //ゲームのカウントに関する数を初期化する
+    func resetGameValues() {
+        self.counter = 0
+        self.correctProblemNumber = 0
+        self.totalSeconds = 0.000
     }
     
     //タイマー処理を全てリセットするメソッド
