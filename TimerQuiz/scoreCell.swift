@@ -1,18 +1,19 @@
 //
-//  guidanceCell.swift
+//  scoreCell.swift
 //  TimerQuiz
 //
-//  Created by 酒井文也 on 2016/03/24.
+//  Created by 酒井文也 on 2016/03/26.
 //  Copyright © 2016年 just1factory. All rights reserved.
 //
 
 import UIKit
 
-class guidanceCell: UITableViewCell {
+class scoreCell: UITableViewCell {
 
-    //ガイダンステキスト用セルのタイトル・文言
-    @IBOutlet var guidanceTitle: UILabel!
-    @IBOutlet var guidanceDescription: UILabel!
+    //スコア履歴用セルのタイトル・文言
+    @IBOutlet var scoreDate: UILabel!
+    @IBOutlet var scoreAmount: UILabel!
+    @IBOutlet var scoreTime: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

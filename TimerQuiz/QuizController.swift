@@ -287,8 +287,12 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
             //規定回数まで到達した場合は次の画面へ遷移する
             self.resetTimerCurrentController()
             
-            //@todo:Realmに計算結果データを保存する
-            
+            //Realmに計算結果データを保存する
+            let gameScoreObject = GameScore.create()
+            gameScoreObject.correctAmount = self.correctProblemNumber
+            gameScoreObject.timeCount = self.totalSeconds
+            gameScoreObject.createDate = NSDate()
+            gameScoreObject.save()
             
             //次のコントローラーへ遷移する
             self.performSegueWithIdentifier("goQuiz", sender: nil)

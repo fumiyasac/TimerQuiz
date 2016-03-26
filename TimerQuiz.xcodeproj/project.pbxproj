@@ -18,6 +18,9 @@
 		DE4273B01C9A4437003C7D4F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DE4273AE1C9A4437003C7D4F /* LaunchScreen.storyboard */; };
 		DE4273BB1C9A4438003C7D4F /* TimerQuizTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4273BA1C9A4438003C7D4F /* TimerQuizTests.swift */; };
 		DE4273C61C9A4438003C7D4F /* TimerQuizUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4273C51C9A4438003C7D4F /* TimerQuizUITests.swift */; };
+		DEBA90B01CA6565F006EB2B6 /* problem.csv in Resources */ = {isa = PBXBuildFile; fileRef = DEBA90AF1CA6565F006EB2B6 /* problem.csv */; };
+		DEBA90B31CA66F91006EB2B6 /* scoreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBA90B11CA66F91006EB2B6 /* scoreCell.swift */; };
+		DEBA90B41CA66F91006EB2B6 /* scoreCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DEBA90B21CA66F91006EB2B6 /* scoreCell.xib */; };
 		DED524AF1CA3017900D513F8 /* QuizController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED524AE1CA3017900D513F8 /* QuizController.swift */; };
 		DED524B11CA301B800D513F8 /* ScoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED524B01CA301B800D513F8 /* ScoreController.swift */; };
 		DED524B71CA3C48E00D513F8 /* guidanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED524B51CA3C48E00D513F8 /* guidanceCell.swift */; };
@@ -61,6 +64,9 @@
 		DE4273C11C9A4438003C7D4F /* TimerQuizUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimerQuizUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE4273C51C9A4438003C7D4F /* TimerQuizUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerQuizUITests.swift; sourceTree = "<group>"; };
 		DE4273C71C9A4438003C7D4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DEBA90AF1CA6565F006EB2B6 /* problem.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = problem.csv; sourceTree = "<group>"; };
+		DEBA90B11CA66F91006EB2B6 /* scoreCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = scoreCell.swift; sourceTree = "<group>"; };
+		DEBA90B21CA66F91006EB2B6 /* scoreCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = scoreCell.xib; sourceTree = "<group>"; };
 		DED524AE1CA3017900D513F8 /* QuizController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizController.swift; sourceTree = "<group>"; };
 		DED524B01CA301B800D513F8 /* ScoreController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScoreController.swift; sourceTree = "<group>"; };
 		DED524B51CA3C48E00D513F8 /* guidanceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = guidanceCell.swift; sourceTree = "<group>"; };
@@ -113,6 +119,7 @@
 		DE3373631CA3DABD0025A80E /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
+				DEBA90AF1CA6565F006EB2B6 /* problem.csv */,
 				DE3373641CA3DAD50025A80E /* guidance.csv */,
 			);
 			name = DataSource;
@@ -190,6 +197,8 @@
 			children = (
 				DED524B51CA3C48E00D513F8 /* guidanceCell.swift */,
 				DED524B61CA3C48E00D513F8 /* guidanceCell.xib */,
+				DEBA90B11CA66F91006EB2B6 /* scoreCell.swift */,
+				DEBA90B21CA66F91006EB2B6 /* scoreCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -310,7 +319,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE3373651CA3DAD50025A80E /* guidance.csv in Resources */,
+				DEBA90B41CA66F91006EB2B6 /* scoreCell.xib in Resources */,
 				DE4273B01C9A4437003C7D4F /* LaunchScreen.storyboard in Resources */,
+				DEBA90B01CA6565F006EB2B6 /* problem.csv in Resources */,
 				DED524B81CA3C48E00D513F8 /* guidanceCell.xib in Resources */,
 				DE4273AD1C9A4437003C7D4F /* Assets.xcassets in Resources */,
 				DE4273AB1C9A4437003C7D4F /* Main.storyboard in Resources */,
@@ -392,6 +403,7 @@
 				DE3373621CA3CDA00025A80E /* GameScore.swift in Sources */,
 				DE4273A61C9A4437003C7D4F /* AppDelegate.swift in Sources */,
 				DED524B71CA3C48E00D513F8 /* guidanceCell.swift in Sources */,
+				DEBA90B31CA66F91006EB2B6 /* scoreCell.swift in Sources */,
 				DED524AF1CA3017900D513F8 /* QuizController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

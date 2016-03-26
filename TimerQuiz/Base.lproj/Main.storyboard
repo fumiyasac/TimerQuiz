@@ -383,8 +383,8 @@
                                     <constraint firstAttribute="height" constant="28" id="008-hX-C9j"/>
                                 </constraints>
                                 <segments>
-                                    <segment title="結果グラフ"/>
                                     <segment title="スコア履歴"/>
+                                    <segment title="結果グラフ"/>
                                 </segments>
                                 <color key="tintColor" red="0.80000000000000004" green="0.59999999999999998" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>

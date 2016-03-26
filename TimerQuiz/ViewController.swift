@@ -8,6 +8,12 @@
 
 import UIKit
 
+//テーブルビューに関係する定数
+struct GuidanceTableStruct {
+    static let cellCount: Int = 5
+    static let cellSectionCount: Int = 1
+}
+
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UINavigationControllerDelegate {
 
     //Outlet接続をした部品
@@ -15,10 +21,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //テーブルビューに表示する文言の内容を入れておくメンバ変数
     var guidanceArray: NSMutableArray = []
-    
-    //セルカウント数とセクションカウント数
-    var cellCount: Int = 5
-    var cellSectionCount: Int = 1
     
     //画面出現のタイミングに読み込まれる処理
     override func viewWillAppear(animated: Bool) {
@@ -75,12 +77,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     //TableViewに関する設定一覧（セクション数）
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return self.cellSectionCount
+        return GuidanceTableStruct.cellCount
     }
     
     //TableViewに関する設定一覧（セクションのセル数）
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.cellCount
+        return GuidanceTableStruct.cellSectionCount
     }
     
     //TableViewに関する設定一覧（セルに関する設定）
