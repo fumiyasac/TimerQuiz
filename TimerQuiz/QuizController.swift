@@ -96,11 +96,10 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         
         //ナビゲーションのデリゲート設定
         self.navigationController?.delegate = self
-        self.navigationItem.title = "問題を解いています..."
+        self.navigationItem.title = "問題を解く"
         
         //テキストフィールドのデリゲート
         self.problemTextView.delegate = self
-        
     }
     
     //各選択肢のボタンアクション
@@ -191,7 +190,7 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
             }
             
             //配列を引数分の要素をランダムにシャッフルする(※Extension.swift参照)
-            self.problemArray.shuffle(QuizStruct.dataMaxCount)
+            self.problemArray.shuffle(self.problemArray.count)
             
             //配列の中に配列が入った状態にする
             //print(self.problemArray)

@@ -14,6 +14,36 @@ import RealmSwift
 //Charsクラスのインポート
 import Charts
 
+//グラフに描画する要素数に関するenum
+enum GraphXLabelList : Int {
+    
+    case One = 1
+    case Two = 2
+    case Three = 3
+    case Four = 4
+    case Five = 5
+    
+    static func getXLabelList(count: Int) -> [String] {
+        
+        var xLabels: [String] = []
+        
+        //※この画面に遷移したらデータが登録されるので0は考えなくて良い
+        if count == self.One.rawValue {
+            xLabels = ["最新"]
+        } else if count == self.Two.rawValue {
+            xLabels = ["最新", "2つ前"]
+        } else if count == self.Three.rawValue {
+            xLabels = ["最新", "2つ前", "3つ前"]
+        } else if count == self.Four.rawValue {
+            xLabels = ["最新", "2つ前", "3つ前", "4つ前"]
+        } else {
+            xLabels = ["最新", "2つ前", "3つ前", "4つ前", "5つ前"]
+        }
+        return xLabels
+    }
+    
+}
+
 //日付の相互変換用
 struct ChangeDate {
     
@@ -60,8 +90,10 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
         //Realmから履歴データを呼び出す
         self.fetchHistoryDataFromRealm()
         
-        self.resultHistoryTable.alpha = 0
-        self.resultGraphView.alpha = 1
+        //セグメントコントロールの初期値を設定する
+        self.analyticsSegmentControl.selectedSegmentIndex = 0
+        self.resultHistoryTable.alpha = 1
+        self.resultGraphView.alpha = 0
     }
     
     override func viewDidLoad() {
@@ -76,47 +108,29 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
         self.resultHistoryTable.dataSource = self
         
         //Xibのクラスを読み込む
-        let nibDefault:UINib = UINib(nibName: "scoreCell", bundle: nil)
+        let nibDefault: UINib = UINib(nibName: "scoreCell", bundle: nil)
         self.resultHistoryTable.registerNib(nibDefault, forCellReuseIdentifier: "scoreCell")
         
-        
-        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-        let unitsSold = [20.0, 4.0, 6.0, 3.0, 12.0, 16.0]
+        //データを成型して表示する（変数xLabelsとunitSoldに入る配列の要素数は合わせないと落ちる）
+        let unitsSold: [Double] = GameScore.fetchGraphGameScore()
+        let xLabels = GraphXLabelList.getXLabelList(unitsSold.count)
         
         var dataEntries: [ChartDataEntry] = []
         
-        for i in 0..<months.count {
+        for i in 0..<xLabels.count {
             let dataEntry = ChartDataEntry(value: unitsSold[i], xIndex: i)
             dataEntries.append(dataEntry)
         }
         
-        /*
-         let pieChartDataSet = PieChartDataSet(yVals: dataEntries, label: "Units Sold")
-         let pieChartData = PieChartData(xVals: dataPoints, dataSet: pieChartDataSet)
-         pieChartView.data = pieChartData
-         
-         var colors: [UIColor] = []
-         
-         for i in 0..<dataPoints.count {
-         let red = Double(arc4random_uniform(256))
-         let green = Double(arc4random_uniform(256))
-         let blue = Double(arc4random_uniform(256))
-         
-         let color = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
-         colors.append(color)
-         }
-         
-         pieChartDataSet.colors = colors
-         */
+        //グラフに描画するデータを表示する
+        let lineChartDataSet = LineChartDataSet(yVals: dataEntries, label: "ここ最近の得点グラフ")
+        let lineChartData = LineChartData(xVals: xLabels, dataSet: lineChartDataSet)
         
-        let lineChartDataSet = LineChartDataSet(yVals: dataEntries, label: "Units Sold")
-        let lineChartData = LineChartData(xVals: months, dataSet: lineChartDataSet)
-        print(lineChartData)
+        //LineChartViewのインスタンスに値を追加する
         self.lineChartView.data = lineChartData
-        print(self.lineChartView)
-        self.resultGraphView.addSubview(self.lineChartView)
         
-        //self.setChart(months, values: unitsSold)
+        //UIViewの中にLineChartViewを追加する
+        self.resultGraphView.addSubview(self.lineChartView)
     }
 
     //レイアウト処理が完了した際の処理
@@ -157,13 +171,6 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
         return cell!
     }
     
-    
-    func setChart(dataPoints: [String], values: [Double]) {
-        
-
-        
-    }
-    
     //TableView: セルの高さを返す
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return ScoreTableStruct.cellHeight
@@ -200,12 +207,18 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
         switch sender.selectedSegmentIndex {
             
             case 0:
+                self.resultHistoryTable.alpha = 1
+                self.resultGraphView.alpha = 0
                 break
             
             case 1:
+                self.resultHistoryTable.alpha = 0
+                self.resultGraphView.alpha = 1
                 break
             
             default:
+                self.resultHistoryTable.alpha = 1
+                self.resultGraphView.alpha = 0
                 break
         }
     }

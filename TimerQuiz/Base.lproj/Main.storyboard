@@ -132,7 +132,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="b9X-I0-hy1"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <state key="normal" title="1番目の選択肢">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -146,7 +146,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="rTa-dT-w4b"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <state key="normal" title="2番目の選択肢">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -160,7 +160,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="UkJ-9f-Xgv"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <state key="normal" title="3番目の選択肢">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -174,7 +174,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="DJI-hq-il8"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <state key="normal" title="4番目の選択肢">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -347,7 +347,6 @@
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cq2-Mf-0hS">
                                 <rect key="frame" x="20" y="216" width="560" height="306"/>
-                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="結果を読み込んでいます..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i89-0t-uZp">
                                 <rect key="frame" x="20" y="132" width="560" height="30"/>

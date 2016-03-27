@@ -64,4 +64,18 @@ class GameScore: Object {
         //print(gameScoreList)
         return gameScoreList
     }
+    
+    //登録日順のデータを最新から5件取得をする
+    static func fetchGraphGameScore() -> [Double] {
+        let gameScores: Results<GameScore> = realm.objects(GameScore).sorted("createDate", ascending: false)
+        var gameScoreList: [Double] = []
+        for (index, element) in gameScores.enumerate() {
+            if index < 5 {
+                let target: Double = Double(element.correctAmount)
+                gameScoreList.append(target)
+            }
+        }
+        //print(gameScoreList)
+        return gameScoreList
+    }
 }
