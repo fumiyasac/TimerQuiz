@@ -227,7 +227,7 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
     @IBAction func goExplainHowtoAction(sender: AnyObject) {
         
         //Safariで立ち上げるようにする
-        let url = NSURL(string: "http://qiita.com")
+        let url = NSURL(string: "http://qiita.com/fumiyasac@github/items/18ae522885b5aa507ca3")
         let app: UIApplication = UIApplication.sharedApplication()
         app.openURL(url!)
     }

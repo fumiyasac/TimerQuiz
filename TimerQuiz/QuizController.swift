@@ -88,7 +88,9 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     
     //画面が消えるタイミングに読み込まれる処理
     override func viewWillDisappear(animated: Bool) {
-        self.killTimerAnotherController()
+        
+        //タイマーをリセットしておく
+        self.resetTimer()
     }
 
     override func viewDidLoad() {
@@ -192,9 +194,6 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
             //配列を引数分の要素をランダムにシャッフルする(※Extension.swift参照)
             self.problemArray.shuffle(self.problemArray.count)
             
-            //配列の中に配列が入った状態にする
-            //print(self.problemArray)
-            
         } catch let error as NSError {
             print(error.localizedDescription)
         }
@@ -204,8 +203,8 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     //タイマーを破棄して再起動を行うメソッド
     func reloadTimer() {
         
-        //タイマーを破棄
-        self.resetTimerCurrentController()
+        //タイマーを破棄する
+        self.resetTimer()
         
         //結果表示ページへ遷移するか次の問題を表示する
         self.compareNextProblemOrResultView()
@@ -283,8 +282,12 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         
         if self.counter == QuizStruct.dataMaxCount {
             
-            //規定回数まで到達した場合は次の画面へ遷移する
-            self.resetTimerCurrentController()
+            /**
+             *（処理）規定回数まで到達した場合は次の画面へ遷移する
+             */
+            
+            //タイマーを破棄する
+            self.resetTimer()
             
             //Realmに計算結果データを保存する
             let gameScoreObject = GameScore.create()
@@ -298,7 +301,11 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
             
         } else {
             
-            //規定回数に達していない場合はカウントをリセットして次の問題を表示する
+            /**
+             *（処理）規定回数に達していない場合はカウントをリセットして次の問題を表示する
+             */
+            
+            //ボタンを全て活性にする
             self.allAnswerBtnEnabled()
             
             //次の問題をセットする
@@ -338,14 +345,8 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     }
     
     //タイマー処理を全てリセットするメソッド
-    func resetTimerCurrentController() {
+    func resetTimer() {
         self.perSecTimer!.invalidate()
-        self.doneTimer!.invalidate()
-    }
-    
-    //タイマー処理を全て破棄するメソッド
-    func killTimerAnotherController() {
-        self.perSecTimer!.fire()
         self.doneTimer!.invalidate()
     }
     

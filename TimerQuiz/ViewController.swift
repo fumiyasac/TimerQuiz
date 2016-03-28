@@ -47,9 +47,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 self.guidanceArray.addObject(parts)
             }
             
-            //配列の中に配列が入った状態にする
-            //print(self.guidanceArray)
-            
         } catch let error as NSError {
             print(error.localizedDescription)
         }

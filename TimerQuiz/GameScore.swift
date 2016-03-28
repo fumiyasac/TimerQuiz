@@ -61,7 +61,6 @@ class GameScore: Object {
         for gameScore in gameScores {
             gameScoreList.append(gameScore)
         }
-        //print(gameScoreList)
         return gameScoreList
     }
     
@@ -75,7 +74,6 @@ class GameScore: Object {
                 gameScoreList.append(target)
             }
         }
-        //print(gameScoreList)
         return gameScoreList
     }
 }
