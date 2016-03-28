@@ -73,6 +73,9 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     //画面出現しきったタイミングに読み込まれる処理
     override func viewDidAppear(animated: Bool) {
         
+        //ラベルを表示を「しばらくお待ちください...」から「あと10秒」という表記へ変更する
+        self.timerDisplayLabel.text = "あと" + String(self.pastCounter) + "秒"
+        
         //ボタンを全て活性状態にする
         self.allAnswerBtnEnabled()
         
@@ -88,6 +91,9 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     
     //画面が消えるタイミングに読み込まれる処理
     override func viewWillDisappear(animated: Bool) {
+        
+        //ラベルを表示を「しばらくお待ちください...」へ戻す
+        self.timerDisplayLabel.text = "しばらくお待ちください..."
         
         //タイマーをリセットしておく
         self.resetTimer()
