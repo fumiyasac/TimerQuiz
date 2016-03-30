@@ -175,7 +175,7 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     //CSVデータから問題を取得するメソッド
     func setProblemsFromCSV() {
         
-        //ガイダンス用のテーブルビューに表示するテキストを(CSV形式で準備)読み込む
+        //問題を(CSV形式で準備)読み込む
         let csvBundle = NSBundle.mainBundle().pathForResource("problem", ofType: "csv")
         
         //CSVデータの解析処理
