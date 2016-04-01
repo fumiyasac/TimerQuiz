@@ -19,4 +19,4 @@
 
 詳細な解説＆実装のポイントになる部分はこちらに掲載しておりますので、是非とも実機などがおありの場合はインストールをして挙動や振る舞いをご確認いただければと思います。
 
-(Qiita) http://qiita.com/fumiyasac@github/items/cbdf4d36cc14e213aaa7
+(Qiita) http://qiita.com/fumiyasac@github/items/18ae522885b5aa507ca3
