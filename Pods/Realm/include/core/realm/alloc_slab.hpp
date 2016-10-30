@@ -1,26 +1,25 @@
 /*************************************************************************
  *
- * REALM CONFIDENTIAL
- * __________________
+ * Copyright 2016 Realm Inc.
  *
- *  [2011] - [2015] Realm Inc
- *  All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * NOTICE:  All information contained herein is, and remains
- * the property of Realm Incorporated and its suppliers,
- * if any.  The intellectual and technical concepts contained
- * herein are proprietary to Realm Incorporated
- * and its suppliers and may be covered by U.S. and Foreign Patents,
- * patents in process, and are protected by trade secret or copyright law.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Realm Incorporated.
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  **************************************************************************/
+
 #ifndef REALM_ALLOC_SLAB_HPP
 #define REALM_ALLOC_SLAB_HPP
 
-#include <stdint.h> // unint8_t etc
+#include <cstdint> // unint8_t etc
 #include <vector>
 #include <string>
 #include <atomic>
@@ -56,11 +55,46 @@ struct InvalidDatabase;
 ///
 /// For efficiency, this allocator manages its mutable memory as a set
 /// of slabs.
-class SlabAlloc: public Allocator {
+class SlabAlloc : public Allocator {
 public:
     ~SlabAlloc() noexcept override;
     SlabAlloc();
 
+    /// \struct Config
+    /// \brief Storage for combining setup flags for initialization to
+    /// the SlabAlloc.
+    ///
+    /// \var Config::is_shared
+    /// Must be true if, and only if we are called on behalf of SharedGroup.
+    ///
+    /// \var Config::read_only
+    /// Open the file in read-only mode. This implies \a Config::no_create.
+    ///
+    /// \var Config::no_create
+    /// Fail if the file does not already exist.
+    ///
+    /// \var Config::skip_validate
+    /// Skip validation of file header. In a
+    /// set of overlapping SharedGroups, only the first one (the one
+    /// that creates/initlializes the coordination file) may validate
+    /// the header, otherwise it will result in a race condition.
+    ///
+    /// \var Config::encryption_key
+    /// 32-byte key to use to encrypt and decrypt the backing storage,
+    /// or nullptr to disable encryption.
+    ///
+    /// \var Config::session_initiator
+    /// If set, the caller is the session initiator and
+    /// guarantees exclusive access to the file. If attaching in
+    /// read/write mode, the file is modified: files on streaming form
+    /// is changed to non-streaming form, and if needed the file size
+    /// is adjusted to match mmap boundaries.
+    /// Must be set to false if is_shared is false.
+    ///
+    /// \var Config::clear_file
+    /// Always initialize the file as if it was a newly
+    /// created file and ignore any pre-existing contents. Requires that
+    /// Config::session_initiator be true as well.
     struct Config {
         bool is_shared = false;
         bool read_only = false;
@@ -71,7 +105,8 @@ public:
         const char* encryption_key = nullptr;
     };
 
-    struct Retry {};
+    struct Retry {
+    };
 
     /// \brief Attach this allocator to the specified file.
     ///
@@ -98,44 +133,23 @@ public:
     /// Except for \a path, the parameters are passed in through a
     /// configuration object.
     ///
-    /// \param is_shared Must be true if, and only if we are called on
-    /// behalf of SharedGroup.
-    ///
-    /// \param read_only Open the file in read-only mode. This implies
-    /// \a no_create.
-    ///
-    /// \param no_create Fail if the file does not already exist.
-    ///
-    /// \param bool skip_validate Skip validation of file header. In a
-    /// set of overlapping SharedGroups, only the first one (the one
-    /// that creates/initlializes the coordination file) may validate
-    /// the header, otherwise it will result in a race condition.
-    ///
-    /// \param encryption_key 32-byte key to use to encrypt and decrypt
-    /// the backing storage, or nullptr to disable encryption.
-    ///
-    /// \param session_initiator if set, the caller is the session initiator and
-    /// guarantees exclusive access to the file. If attaching in read/write mode,
-    /// the file is modified: files on streaming form is changed to non-streaming
-    /// form, and if needed the file size is adjusted to match mmap boundaries.
-    /// Must be set to false if is_shared is false.
-    ///
-    /// \param clear_file Always initialize the file as if it was a newly
-    /// created file and ignore any pre-existing contents. Requires that
-    /// session_initiator be true as well.
-    ///
     /// \return The `ref` of the root node, or zero if there is none.
     ///
-    /// Please note that attach_file can fail to attach to a file due to a collision
-    /// with a writer extending the file. This can only happen if the caller is *not*
-    /// the session initiator. When this happens, attach_file() throws SlabAlloc::Retry,
-    /// and the caller must retry the call. The caller should check if it has become
-    /// the session initiator before retrying. This can happen if the conflicting thread
-    /// (or process) terminates or crashes before the next retry.
+    /// Please note that attach_file can fail to attach to a file due to a
+    /// collision with a writer extending the file. This can only happen if the
+    /// caller is *not* the session initiator. When this happens, attach_file()
+    /// throws SlabAlloc::Retry, and the caller must retry the call. The caller
+    /// should check if it has become the session initiator before retrying.
+    /// This can happen if the conflicting thread (or process) terminates or
+    /// crashes before the next retry.
     ///
     /// \throw util::File::AccessError
     /// \throw SlabAlloc::Retry
     ref_type attach_file(const std::string& path, Config& cfg);
+
+    /// Get the attached file. Only valid when called on an allocator with
+    /// an attached file.
+    util::File& get_file();
 
     /// Attach this allocator to the specified memory buffer.
     ///
@@ -155,7 +169,7 @@ public:
     /// \sa own_buffer()
     ///
     /// \throw InvalidDatabase
-    ref_type attach_buffer(char* data, size_t size);
+    ref_type attach_buffer(const char* data, size_t size);
 
     /// Reads file format from file header. Must be called from within a write
     /// transaction.
@@ -293,17 +307,20 @@ public:
     /// \sa get_file_format_version()
     void set_file_format_version(int) noexcept;
 
-#ifdef REALM_DEBUG
-    void enable_debug(bool enable) { m_debug_out = enable; }
     void verify() const override;
+#ifdef REALM_DEBUG
+    void enable_debug(bool enable)
+    {
+        m_debug_out = enable;
+    }
     bool is_all_free() const;
     void print() const;
 #endif
+    struct MappedFile;
 
 protected:
-    MemRef do_alloc(size_t size) override;
-    MemRef do_realloc(ref_type, const char*, size_t old_size,
-                    size_t new_size) override;
+    MemRef do_alloc(const size_t size) override;
+    MemRef do_realloc(ref_type, const char*, size_t old_size, size_t new_size) override;
     // FIXME: It would be very nice if we could detect an invalid free operation in debug mode
     void do_free(ref_type, const char*) noexcept override;
     char* do_translate(ref_type) const noexcept override;
@@ -335,14 +352,14 @@ private:
 
     // Values of each used bit in m_flags
     enum {
-        flags_SelectBit = 1
+        flags_SelectBit = 1,
     };
 
     // 24 bytes
     struct Header {
         uint64_t m_top_ref[2]; // 2 * 8 bytes
         // Info-block 8-bytes
-        uint8_t m_mnemonic[4]; // "T-DB"
+        uint8_t m_mnemonic[4];    // "T-DB"
         uint8_t m_file_format[2]; // See `library_file_format`
         uint8_t m_reserved;
         // bit 0 of m_flags is used to select between the two top refs.
@@ -355,45 +372,37 @@ private:
         uint64_t m_magic_cookie;
     };
 
-    static_assert(sizeof (Header) == 24, "Bad header size");
-    static_assert(sizeof (StreamingFooter) == 16, "Bad footer size");
+    static_assert(sizeof(Header) == 24, "Bad header size");
+    static_assert(sizeof(StreamingFooter) == 16, "Bad footer size");
 
     static const Header empty_file_header;
     static void init_streaming_header(Header*, int file_format_version);
 
     static const uint_fast64_t footer_magic_cookie = 0x3034125237E526C8ULL;
 
-    util::File m_file;
+    // The mappings are shared, if they are from a file
+    std::shared_ptr<MappedFile> m_file_mappings;
 
-    // The initial mapping is determined by m_data and m_initial_mapping_size,
-    util::File::Map<char> m_initial_mapping;
-    char* m_data = nullptr;
-    size_t m_initial_mapping_size = 0;
-    // additional sections beyond those covered by the initial mapping, are
-    // managed as separate mmap allocations, each covering one section.
-    size_t m_first_additional_mapping = 0;
-    size_t m_num_additional_mappings = 0;
-    size_t m_capacity_additional_mappings = 0;
+    // We are caching local copies of all the additional mappings to allow
+    // for lock-free lookup during ref->address translation (we do not need
+    // to cache the first mapping, because it is immutable) (well, all the
+    // mappings are immutable, but the array holding them is not - it may
+    // have to be relocated)
+    std::unique_ptr<std::shared_ptr<const util::File::Map<char>>[]> m_local_mappings;
+    size_t m_num_local_mappings = 0;
+
+    const char* m_data = nullptr;
+    size_t m_initial_chunk_size = 0;
     size_t m_initial_section_size = 0;
     int m_section_shifts = 0;
-    std::unique_ptr<util::File::Map<char>[]> m_additional_mappings;
     std::unique_ptr<size_t[]> m_section_bases;
     size_t m_num_section_bases = 0;
     AttachMode m_attach_mode = attach_None;
-
-    /// If a file or buffer is currently attached and validation was
-    /// not skipped during attachement, this flag is true if, and only
-    /// if the attached file has a footer specifying the top-ref, that
-    /// is, if the file is on the streaming form. This member is
-    /// deliberately placed here (after m_attach_mode) in the hope
-    /// that it leads to less padding between members due to alignment
-    /// requirements.
-    bool m_file_on_streaming_form;
-
+    bool m_file_on_streaming_form = false;
     enum FeeeSpaceState {
         free_space_Clean,
         free_space_Dirty,
-        free_space_Invalid
+        free_space_Invalid,
     };
 
     /// When set to free_space_Invalid, the free lists are no longer
@@ -412,16 +421,15 @@ private:
     chunks m_free_space;
     chunks m_free_read_only;
 
-#ifdef REALM_DEBUG
     bool m_debug_out = false;
-#endif
     struct hash_entry {
         ref_type ref = 0;
-        char* addr = nullptr;
+        const char* addr = nullptr;
         size_t version = 0;
     };
     mutable hash_entry cache[256];
     mutable size_t version = 1;
+
     /// Throws if free-lists are no longer valid.
     const chunks& get_free_read_only() const;
 
@@ -430,13 +438,23 @@ private:
     /// function will not detect all forms of corruption, though.
     void validate_buffer(const char* data, size_t len, const std::string& path, bool is_shared);
 
+    /// Read the top_ref from the given buffer and set m_file_on_streaming_form
+    /// if the buffer contains a file in streaming form
+    ref_type get_top_ref(const char* data, size_t len);
+
     class ChunkRefEq;
     class ChunkRefEndEq;
     class SlabRefEndEq;
     static bool ref_less_than_slab_ref_end(ref_type, const Slab&) noexcept;
 
-    Replication* get_replication() const noexcept { return m_replication; }
-    void set_replication(Replication* r) noexcept { m_replication = r; }
+    Replication* get_replication() const noexcept
+    {
+        return m_replication;
+    }
+    void set_replication(Replication* r) noexcept
+    {
+        m_replication = r;
+    }
 
     /// Returns the first section boundary *above* the given position.
     size_t get_upper_section_boundary(size_t start_pos) const noexcept;
@@ -466,31 +484,36 @@ private:
     /// Find a possible allocation of 'request_size' that will fit into a section
     /// which is inside the range from 'start_pos' to 'start_pos'+'free_chunk_size'
     /// If found return the position, if not return 0.
-    size_t find_section_in_range(size_t start_pos, size_t free_chunk_size,
-                                      size_t request_size) const noexcept;
+    size_t find_section_in_range(size_t start_pos, size_t free_chunk_size, size_t request_size) const noexcept;
 
     friend class Group;
     friend class GroupWriter;
 };
 
-inline void SlabAlloc::invalidate_cache() noexcept { ++version; }
+inline void SlabAlloc::invalidate_cache() noexcept
+{
+    ++version;
+}
 
 class SlabAlloc::DetachGuard {
 public:
-    DetachGuard(SlabAlloc& alloc) noexcept: m_alloc(&alloc) {}
+    DetachGuard(SlabAlloc& alloc) noexcept
+        : m_alloc(&alloc)
+    {
+    }
     ~DetachGuard() noexcept;
     SlabAlloc* release() noexcept;
+
 private:
     SlabAlloc* m_alloc;
 };
 
 
-
 // Implementation:
 
-struct InvalidDatabase: util::File::AccessError {
-    InvalidDatabase(const std::string& msg, const std::string& path):
-        util::File::AccessError(msg, path)
+struct InvalidDatabase : util::File::AccessError {
+    InvalidDatabase(const std::string& msg, const std::string& path)
+        : util::File::AccessError(msg, path)
     {
     }
 };
@@ -499,7 +522,7 @@ inline void SlabAlloc::own_buffer() noexcept
 {
     REALM_ASSERT_3(m_attach_mode, ==, attach_UsersBuffer);
     REALM_ASSERT(m_data);
-    REALM_ASSERT(!m_file.is_attached());
+    REALM_ASSERT(m_file_mappings == nullptr);
     m_attach_mode = attach_OwnedBuffer;
 }
 
@@ -524,27 +547,6 @@ inline bool SlabAlloc::is_free_space_clean() const noexcept
     return m_free_space_state == free_space_Clean;
 }
 
-inline void SlabAlloc::set_file_format_version(int file_format_version) noexcept
-{
-    m_file_format_version = file_format_version;
-}
-
-inline void SlabAlloc::resize_file(size_t new_file_size)
-{
-    m_file.prealloc(0, new_file_size); // Throws
-    bool disable_sync = get_disable_sync_to_disk();
-    if (!disable_sync)
-        m_file.sync(); // Throws
-}
-
-inline void SlabAlloc::reserve_disk_space(size_t size)
-{
-    m_file.prealloc_if_supported(0, size); // Throws
-    bool disable_sync = get_disable_sync_to_disk();
-    if (!disable_sync)
-        m_file.sync(); // Throws
-}
-
 inline SlabAlloc::DetachGuard::~DetachGuard() noexcept
 {
     if (m_alloc)
@@ -565,7 +567,7 @@ inline bool SlabAlloc::ref_less_than_slab_ref_end(ref_type ref, const Slab& slab
 
 inline size_t SlabAlloc::get_upper_section_boundary(size_t start_pos) const noexcept
 {
-    return get_section_base(1+get_section_index(start_pos));
+    return get_section_base(1 + get_section_index(start_pos));
 }
 
 inline size_t SlabAlloc::get_lower_section_boundary(size_t start_pos) const noexcept
