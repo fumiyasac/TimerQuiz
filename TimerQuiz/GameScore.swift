@@ -15,7 +15,7 @@ class GameScore: Object {
     static let realm = try! Realm()
     
     //id
-    dynamic private var id = 0
+    dynamic fileprivate var id = 0
     
     //正解数（Int型）
     dynamic var correctAmount = 0
@@ -23,8 +23,8 @@ class GameScore: Object {
     //正解までにかかった時間（String型）
     dynamic var timeCount = ""
     
-    //登録日（NSDate型）
-    dynamic var createDate = NSDate(timeIntervalSince1970: 0)
+    //登録日（Date型）
+    dynamic var createDate = Date(timeIntervalSince1970: 0)
     
     //PrimaryKeyの設定
     override static func primaryKey() -> String? {
@@ -40,7 +40,7 @@ class GameScore: Object {
     
     //プライマリキーの作成メソッド
     static func getLastId() -> Int {
-        if let gameScore = realm.objects(GameScore).last {
+        if let gameScore = realm.objects(GameScore.self).last {
             return gameScore.id + 1
         } else {
             return 1
@@ -56,7 +56,7 @@ class GameScore: Object {
     
     //登録日順のデータの全件取得をする
     static func fetchAllGameScore() -> [GameScore] {
-        let gameScores: Results<GameScore> = realm.objects(GameScore).sorted("createDate", ascending: false)
+        let gameScores: Results<GameScore> = realm.objects(GameScore.self).sorted(byProperty: "createDate", ascending: false)
         var gameScoreList: [GameScore] = []
         for gameScore in gameScores {
             gameScoreList.append(gameScore)
@@ -66,9 +66,9 @@ class GameScore: Object {
     
     //登録日順のデータを最新から5件取得をする
     static func fetchGraphGameScore() -> [Double] {
-        let gameScores: Results<GameScore> = realm.objects(GameScore).sorted("createDate", ascending: false)
+        let gameScores: Results<GameScore> = realm.objects(GameScore.self).sorted(byProperty: "createDate", ascending: false)
         var gameScoreList: [Double] = []
-        for (index, element) in gameScores.enumerate() {
+        for (index, element) in gameScores.enumerated() {
             if index < 5 {
                 let target: Double = Double(element.correctAmount)
                 gameScoreList.append(target)

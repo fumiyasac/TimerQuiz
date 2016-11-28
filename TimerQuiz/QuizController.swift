@@ -10,10 +10,10 @@ import UIKit
 
 //回答した番号の識別用enum
 enum Answer: Int {
-    case One = 1
-    case Two = 2
-    case Three = 3
-    case Four = 4
+    case one = 1
+    case two = 2
+    case three = 3
+    case four = 4
 }
 
 //ゲームに関係する定数
@@ -39,8 +39,8 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     
     //タイマー関連のメンバ変数
     var pastCounter: Int = 10
-    var perSecTimer: NSTimer? = nil
-    var doneTimer: NSTimer? = nil
+    var perSecTimer: Timer? = nil
+    var doneTimer: Timer? = nil
     
     //問題関連のメンバ変数
     var counter: Int = 0
@@ -56,22 +56,22 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     var tmpTimerCount: Double!
     
     //タイム表示用のメンバ変数
-    var timeProblemSolvedZero: NSDate!  //画面表示時点の時間
-    var timeProblemSolvedOne: NSDate!   //第1問回答時点の時間
-    var timeProblemSolvedTwo: NSDate!   //第2問回答時点の時間
-    var timeProblemSolvedThree: NSDate! //第3問回答時点の時間
-    var timeProblemSolvedFour: NSDate!  //第4問回答時点の時間
-    var timeProblemSolvedFive: NSDate!  //第5問回答時点の時間
+    var timeProblemSolvedZero: Date!  //画面表示時点の時間
+    var timeProblemSolvedOne: Date!   //第1問回答時点の時間
+    var timeProblemSolvedTwo: Date!   //第2問回答時点の時間
+    var timeProblemSolvedThree: Date! //第3問回答時点の時間
+    var timeProblemSolvedFour: Date!  //第4問回答時点の時間
+    var timeProblemSolvedFive: Date!  //第5問回答時点の時間
     
     //画面出現中のタイミングに読み込まれる処理
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         //計算配列のセット
         self.setProblemsFromCSV()
     }
 
     //画面出現しきったタイミングに読み込まれる処理
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         
         //ラベルを表示を「しばらくお待ちください...」から「あと10秒」という表記へ変更する
         self.timerDisplayLabel.text = "あと" + String(self.pastCounter) + "秒"
@@ -83,14 +83,14 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         self.createNextProblem()
         
         //1問目の解き始めの時間を保持する
-        self.timeProblemSolvedZero = NSDate()
+        self.timeProblemSolvedZero = Date()
         
         //タイマーをセットする
         self.setTimer()
     }
     
     //画面が消えるタイミングに読み込まれる処理
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         
         //ラベルを表示を「しばらくお待ちください...」へ戻す
         self.timerDisplayLabel.text = "しばらくお待ちください..."
@@ -111,30 +111,30 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     }
     
     //各選択肢のボタンアクション
-    @IBAction func answerActionOne(sender: AnyObject) {
-        self.judgeCurrentAnswer(Answer.One.rawValue)
+    @IBAction func answerActionOne(_ sender: AnyObject) {
+        self.judgeCurrentAnswer(Answer.one.rawValue)
     }
     
-    @IBAction func answerActionTwo(sender: AnyObject) {
-        self.judgeCurrentAnswer(Answer.Two.rawValue)
+    @IBAction func answerActionTwo(_ sender: AnyObject) {
+        self.judgeCurrentAnswer(Answer.two.rawValue)
     }
     
-    @IBAction func answerActionThree(sender: AnyObject) {
-        self.judgeCurrentAnswer(Answer.Three.rawValue)
+    @IBAction func answerActionThree(_ sender: AnyObject) {
+        self.judgeCurrentAnswer(Answer.three.rawValue)
     }
     
-    @IBAction func answerActionFour(sender: AnyObject) {
-        self.judgeCurrentAnswer(Answer.Four.rawValue)
+    @IBAction func answerActionFour(_ sender: AnyObject) {
+        self.judgeCurrentAnswer(Answer.four.rawValue)
     }
 
     //タイマーをセットするメソッド
     func setTimer() {
         
         //毎秒ごとにperSecTimerDoneメソッドを実行するタイマーを作成する
-        self.perSecTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(QuizController.perSecTimerDone), userInfo: nil, repeats: true)
+        self.perSecTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(QuizController.perSecTimerDone), userInfo: nil, repeats: true)
         
         //指定秒数後にtimerDoneメソッドを実行するタイマーを作成する（問題の時間制限に到達した場合の実行）
-        self.doneTimer = NSTimer.scheduledTimerWithTimeInterval(QuizStruct.timerDuration, target: self, selector: #selector(QuizController.timerDone), userInfo: nil, repeats: true)
+        self.doneTimer = Timer.scheduledTimer(timeInterval: QuizStruct.timerDuration, target: self, selector: #selector(QuizController.timerDone), userInfo: nil, repeats: true)
     }
     
     //毎秒ごとのタイマーで呼び出されるメソッド
@@ -152,15 +152,15 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         
         switch self.counter {
         case 0:
-            self.timeProblemSolvedOne = NSDate()
+            self.timeProblemSolvedOne = Date()
         case 1:
-            self.timeProblemSolvedTwo = NSDate()
+            self.timeProblemSolvedTwo = Date()
         case 2:
-            self.timeProblemSolvedThree = NSDate()
+            self.timeProblemSolvedThree = Date()
         case 3:
-            self.timeProblemSolvedFour = NSDate()
+            self.timeProblemSolvedFour = Date()
         case 4:
-            self.timeProblemSolvedFive = NSDate()
+            self.timeProblemSolvedFive = Date()
         default:
             self.tmpTimerCount = 0.000
         }
@@ -176,25 +176,25 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     func setProblemsFromCSV() {
         
         //問題を(CSV形式で準備)読み込む
-        let csvBundle = NSBundle.mainBundle().pathForResource("problem", ofType: "csv")
+        let csvBundle = Bundle.main.path(forResource: "problem", ofType: "csv")
         
         //CSVデータの解析処理
         do {
             
             //CSVデータを読み込む
-            var csvData: String = try String(contentsOfFile: csvBundle!, encoding: NSUTF8StringEncoding)
+            var csvData: String = try String(contentsOfFile: csvBundle!, encoding: String.Encoding.utf8)
             
-            csvData = csvData.stringByReplacingOccurrencesOfString("\r", withString: "")
+            csvData = csvData.replacingOccurrences(of: "\r", with: "")
             
             //改行を基準にしてデータを分割する読み込む
-            let csvArray = csvData.componentsSeparatedByString("\n")
+            let csvArray = csvData.components(separatedBy: "\n")
             
             //CSVデータの行数分ループさせる
             for line in csvArray {
                 
                 //カンマ区切りの1行を["aaa", "bbb", ... , "zzz"]形式に変換して代入する
-                let parts = line.componentsSeparatedByString(",")
-                self.problemArray.addObject(parts)
+                let parts = line.components(separatedBy: ",")
+                self.problemArray.add(parts)
             }
             
             //配列を引数分の要素をランダムにシャッフルする(※Extension.swift参照)
@@ -228,14 +228,14 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         self.problemTextView.text = targetProblem[0] as! String
         
         //ボタンに選択肢を表示する
-        self.answerButtonOne.setTitle("1." + String(targetProblem[2]), forState: .Normal)
-        self.answerButtonTwo.setTitle("2." + String(targetProblem[3]), forState: .Normal)
-        self.answerButtonThree.setTitle("3." + String(targetProblem[4]), forState: .Normal)
-        self.answerButtonFour.setTitle("4." + String(targetProblem[5]), forState: .Normal)
+        self.answerButtonOne.setTitle("1." + String(describing: targetProblem[2]), for: UIControlState())
+        self.answerButtonTwo.setTitle("2." + String(describing: targetProblem[3]), for: UIControlState())
+        self.answerButtonThree.setTitle("3." + String(describing: targetProblem[4]), for: UIControlState())
+        self.answerButtonFour.setTitle("4." + String(describing: targetProblem[5]), for: UIControlState())
     }
     
     //選択された答えが正しいか誤りかを判定するメソッド
-    func judgeCurrentAnswer(answer: Int) {
+    func judgeCurrentAnswer(_ answer: Int) {
         
         //ボタンを全て非活性にする
         self.allAnswerBtnDisabled()
@@ -246,20 +246,20 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         //[問題の回答時間] = [n問目の回答した際の時間] - [(n-1)問目の回答した際の時間]として算出する
         switch self.counter {
             case 0:
-                self.timeProblemSolvedOne = NSDate()
-                self.tmpTimerCount = self.timeProblemSolvedOne.timeIntervalSinceDate(self.timeProblemSolvedZero)
+                self.timeProblemSolvedOne = Date()
+                self.tmpTimerCount = self.timeProblemSolvedOne.timeIntervalSince(self.timeProblemSolvedZero)
             case 1:
-                self.timeProblemSolvedTwo = NSDate()
-                self.tmpTimerCount = self.timeProblemSolvedTwo.timeIntervalSinceDate(self.timeProblemSolvedOne)
+                self.timeProblemSolvedTwo = Date()
+                self.tmpTimerCount = self.timeProblemSolvedTwo.timeIntervalSince(self.timeProblemSolvedOne)
             case 2:
-                self.timeProblemSolvedThree = NSDate()
-                self.tmpTimerCount = self.timeProblemSolvedThree.timeIntervalSinceDate(self.timeProblemSolvedTwo)
+                self.timeProblemSolvedThree = Date()
+                self.tmpTimerCount = self.timeProblemSolvedThree.timeIntervalSince(self.timeProblemSolvedTwo)
             case 3:
-                self.timeProblemSolvedFour = NSDate()
-                self.tmpTimerCount = self.timeProblemSolvedFour.timeIntervalSinceDate(self.timeProblemSolvedThree)
+                self.timeProblemSolvedFour = Date()
+                self.tmpTimerCount = self.timeProblemSolvedFour.timeIntervalSince(self.timeProblemSolvedThree)
             case 4:
-                self.timeProblemSolvedFive = NSDate()
-                self.tmpTimerCount = self.timeProblemSolvedFive.timeIntervalSinceDate(self.timeProblemSolvedFour)
+                self.timeProblemSolvedFive = Date()
+                self.tmpTimerCount = self.timeProblemSolvedFive.timeIntervalSince(self.timeProblemSolvedFour)
             default:
                 self.tmpTimerCount = 0.000
         }
@@ -299,11 +299,11 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
             let gameScoreObject = GameScore.create()
             gameScoreObject.correctAmount = self.correctProblemNumber
             gameScoreObject.timeCount = NSString(format:"%.3f", self.totalSeconds) as String
-            gameScoreObject.createDate = NSDate()
+            gameScoreObject.createDate = Date()
             gameScoreObject.save()
             
             //次のコントローラーへ遷移する
-            self.performSegueWithIdentifier("goScore", sender: nil)
+            self.performSegue(withIdentifier: "goScore", sender: nil)
             
         } else {
             
@@ -326,13 +326,13 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     }
     
     //セグエを呼び出したときに呼ばれるメソッド
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         //セグエ名で判定を行う
         if segue.identifier == "goScore" {
             
             //遷移先のコントローラーの変数を用意する
-            let scoreController = segue.destinationViewController as! ScoreController
+            let scoreController = segue.destination as! ScoreController
             
             //遷移先のコントローラーに渡したい変数を格納（型を合わせてね）
             scoreController.correctProblemNumber = self.correctProblemNumber
@@ -358,18 +358,18 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     
     //全ボタンを非活性にする
     func allAnswerBtnDisabled() {
-        self.answerButtonOne.enabled = false
-        self.answerButtonTwo.enabled = false
-        self.answerButtonThree.enabled = false
-        self.answerButtonFour.enabled = false
+        self.answerButtonOne.isEnabled = false
+        self.answerButtonTwo.isEnabled = false
+        self.answerButtonThree.isEnabled = false
+        self.answerButtonFour.isEnabled = false
     }
     
     //全ボタンを活性にする
     func allAnswerBtnEnabled() {
-        self.answerButtonOne.enabled = true
-        self.answerButtonTwo.enabled = true
-        self.answerButtonThree.enabled = true
-        self.answerButtonFour.enabled = true
+        self.answerButtonOne.isEnabled = true
+        self.answerButtonTwo.isEnabled = true
+        self.answerButtonThree.isEnabled = true
+        self.answerButtonFour.isEnabled = true
     }
     
     override func didReceiveMemoryWarning() {

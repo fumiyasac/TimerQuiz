@@ -9,7 +9,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods.xcscheme</key>
+		<key>Pods-TimerQuiz.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -27,22 +27,22 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>200C0936502FB1DBD76AE488FBD98BA9</key>
+		<key>04CD5DBDD3174EE1E226A4780E0EE706</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4EF4301010721A30F2572A2D37C28DAC</key>
+		<key>0E8AD38E160C8FEBA9A8BE95165F43CA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C6828C2508515BC0428D6BDAA1292DC9</key>
+		<key>64EFF154CBF3E077C7E71876A151EBBB</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EBB244A6DDF1A1818AE457D69EA41767</key>
+		<key>DE3BCE4E0129C4538D760BCA701572BF</key>
 		<dict>
 			<key>primary</key>
 			<true/>
