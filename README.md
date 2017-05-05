@@ -9,7 +9,7 @@
 
 Swift最新版へのコンバートとチャート部分のロジックの変更を行いました。※解説Qiitaも追記しています。
 
-![棒グラフでのゲーム結果画面](https://qiita-image-store.s3.amazonaws.com/0/17400/59bd79d8-b18a-c47e-be2b-199128d56d81.jpeg)
+![棒グラフでのゲーム結果画面](https://qiita-image-store.s3.amazonaws.com/0/17400/59bd79d8-b18a-c47e-be2b-199128d56d81.jpeg =375x667)
 
 また、クイズ画面の設計としましては、下記のような流れになっています。
 
