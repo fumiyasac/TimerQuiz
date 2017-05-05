@@ -5,11 +5,11 @@
 
 ![今回のサンプルの画面設計](https://qiita-image-store.s3.amazonaws.com/0/17400/41bc29fc-b1d6-4926-0c11-a619c4b0cb4d.jpeg)
 
-+ 2017.05.05更新
++ __2017.05.05更新:__
 
-Swift最新版へのコンバートとチャート部分のロジックの変更を行いました。※解説Qiitaも追記しています。
+__Swift最新版へのコンバートとチャート部分のロジックの変更を行いました。※解説Qiitaも追記しています。__
 
-![棒グラフでのゲーム結果画面](https://qiita-image-store.s3.amazonaws.com/0/17400/59bd79d8-b18a-c47e-be2b-199128d56d81.jpeg =375x667)
+![棒グラフでのゲーム結果画面](https://qiita-image-store.s3.amazonaws.com/0/17400/f9a1f95a-f33c-f0e3-6e7a-7ec7f8dfe94c.jpeg)
 
 また、クイズ画面の設計としましては、下記のような流れになっています。
 
