@@ -56,7 +56,7 @@ class GameScore: Object {
     
     //登録日順のデータの全件取得をする
     static func fetchAllGameScore() -> [GameScore] {
-        let gameScores: Results<GameScore> = realm.objects(GameScore.self).sorted(byProperty: "createDate", ascending: false)
+        let gameScores: Results<GameScore> = realm.objects(GameScore.self).sorted(byKeyPath: "createDate", ascending: false)
         var gameScoreList: [GameScore] = []
         for gameScore in gameScores {
             gameScoreList.append(gameScore)
@@ -66,7 +66,7 @@ class GameScore: Object {
     
     //登録日順のデータを最新から5件取得をする
     static func fetchGraphGameScore() -> [Double] {
-        let gameScores: Results<GameScore> = realm.objects(GameScore.self).sorted(byProperty: "createDate", ascending: false)
+        let gameScores: Results<GameScore> = realm.objects(GameScore.self).sorted(byKeyPath: "createDate", ascending: false)
         var gameScoreList: [Double] = []
         for (index, element) in gameScores.enumerated() {
             if index < 5 {

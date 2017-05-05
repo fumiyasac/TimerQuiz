@@ -85,15 +85,15 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
     override func viewWillAppear(_ animated: Bool) {
         
         //QuizControllerから渡された値を出力
-        self.resultDisplayLabel.text = "正解数：合計" + String(self.correctProblemNumber) + "問 / 経過時間：" + self.totalSeconds + "秒"
+        resultDisplayLabel.text = "正解数：合計" + String(correctProblemNumber) + "問 / 経過時間：" + totalSeconds + "秒"
         
         //Realmから履歴データを呼び出す
-        self.fetchHistoryDataFromRealm()
+        fetchHistoryDataFromRealm()
         
         //セグメントコントロールの初期値を設定する
-        self.analyticsSegmentControl.selectedSegmentIndex = 0
-        self.resultHistoryTable.alpha = 1
-        self.resultGraphView.alpha = 0
+        analyticsSegmentControl.selectedSegmentIndex = 0
+        resultHistoryTable.alpha = 1
+        resultGraphView.alpha = 0
     }
     
     override func viewDidLoad() {
@@ -104,33 +104,45 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
         self.navigationItem.title = "ゲーム結果"
                 
         //テーブルビューのデリゲート設定
-        self.resultHistoryTable.delegate = self
-        self.resultHistoryTable.dataSource = self
+        resultHistoryTable.delegate = self
+        resultHistoryTable.dataSource = self
         
         //Xibのクラスを読み込む
         let nibDefault: UINib = UINib(nibName: "scoreCell", bundle: nil)
-        self.resultHistoryTable.register(nibDefault, forCellReuseIdentifier: "scoreCell")
+        resultHistoryTable.register(nibDefault, forCellReuseIdentifier: "scoreCell")
         
         //データを成型して表示する（変数xLabelsとunitSoldに入る配列の要素数は合わせないと落ちる）
         let unitsSold: [Double] = GameScore.fetchGraphGameScore()
         let xLabels = GraphXLabelList.getXLabelList(unitsSold.count)
+        let xLabelsCount = xLabels.count
         
         var dataEntries: [BarChartDataEntry] = []
         
-        for i in 0..<xLabels.count {
-            let dataEntry = BarChartDataEntry(x: unitsSold[i], y: Double(i))
+        for i in 0..<xLabelsCount {
+            
+            print(unitsSold[i])
+            
+            let dataEntry = BarChartDataEntry(x: Double(i), y: Double(unitsSold[i]))
             dataEntries.append(dataEntry)
         }
         
         //グラフに描画するデータを表示する
-        let barChartDataSet = BarChartDataSet(values: dataEntries, label: "ここ最近の得点グラフ")
+        let barChartDataSet = BarChartDataSet(values: dataEntries, label: "直近5回の得点を表示しています")
         let barChartData = BarChartData(dataSet: barChartDataSet)
-        
+
         //BarChartViewのインスタンスに値を追加する
-        self.barChartView.data = barChartData
-        
+        // (参考) バーチャートの装飾参考
+        // http://stackoverflow.com/questions/40323288/how-to-set-x-axis-labels-with-ios-charts
+        // https://fussan-blog.com/swift3-charts/
+
+        barChartView.chartDescription?.text = "得点推移グラフ"
+        barChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.0)
+        barChartView.data = barChartData
+        barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: xLabels)
+        barChartView.xAxis.granularity = 1
+
         //UIViewの中にLineChartViewを追加する
-        self.resultGraphView.addSubview(self.barChartView)
+        resultGraphView.addSubview(barChartView)
     }
 
     //レイアウト処理が完了した際の処理
@@ -138,7 +150,7 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
         super.viewDidLayoutSubviews()
         
         //レイアウトの再配置
-        self.barChartView.frame = CGRect(x: 0, y: 0, width: self.resultGraphView.frame.width, height: self.resultGraphView.frame.height)
+        barChartView.frame = CGRect(x: 0, y: 0, width: resultGraphView.frame.width, height: resultGraphView.frame.height)
     }
     
     //TableViewに関する設定一覧（セクション数）
@@ -148,7 +160,7 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
     
     //TableViewに関する設定一覧（セクションのセル数）
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.scoreArrayForCell.count
+        return scoreArrayForCell.count
     }
     
     //TableViewに関する設定一覧（セルに関する設定）
@@ -185,20 +197,20 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
     func fetchHistoryDataFromRealm() {
         
         //履歴データをフェッチしてTableViewへの一覧表示用のデータを作成
-        self.scoreArrayForCell.removeAllObjects()
+        scoreArrayForCell.removeAllObjects()
         let gameScores = GameScore.fetchAllGameScore()
         
         if gameScores.count != 0 {
             for gameScore in gameScores {
-                self.scoreArrayForCell.add(gameScore)
+                scoreArrayForCell.add(gameScore)
             }
         }
         
         //テーブルビューをリロード
-        self.reloadData()
+        reloadData()
         
         //セグメントコントロール位置の初期設定
-        self.analyticsSegmentControl.selectedSegmentIndex = 0
+        analyticsSegmentControl.selectedSegmentIndex = 0
     }
     
     //セグメントコントロールで表示するものを切り替える
@@ -207,18 +219,18 @@ class ScoreController: UIViewController ,UITableViewDelegate, UITableViewDataSou
         switch sender.selectedSegmentIndex {
             
             case 0:
-                self.resultHistoryTable.alpha = 1
-                self.resultGraphView.alpha = 0
+                resultHistoryTable.alpha = 1
+                resultGraphView.alpha = 0
                 break
             
             case 1:
-                self.resultHistoryTable.alpha = 0
-                self.resultGraphView.alpha = 1
+                resultHistoryTable.alpha = 0
+                resultGraphView.alpha = 1
                 break
             
             default:
-                self.resultHistoryTable.alpha = 1
-                self.resultGraphView.alpha = 0
+                resultHistoryTable.alpha = 1
+                resultGraphView.alpha = 0
                 break
         }
     }

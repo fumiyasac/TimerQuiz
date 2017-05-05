@@ -44,7 +44,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 
                 //カンマ区切りの1行を["aaa", "bbb", ... , "zzz"]形式に変換して代入する
                 let parts = line.components(separatedBy: ",")
-                self.guidanceArray.add(parts)
+                guidanceArray.add(parts)
             }
             
         } catch let error as NSError {
@@ -60,16 +60,16 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.navigationItem.title = "食べ合わせクイズ"
         
         //テーブルビューのデリゲート設定
-        self.guideTableView.delegate = self
-        self.guideTableView.dataSource = self
+        guideTableView.delegate = self
+        guideTableView.dataSource = self
         
         //自動計算の場合は必要
-        self.guideTableView.estimatedRowHeight = 48
-        self.guideTableView.rowHeight = UITableViewAutomaticDimension
+        guideTableView.estimatedRowHeight = 48
+        guideTableView.rowHeight = UITableViewAutomaticDimension
         
         //Xibのクラスを読み込む
         let nibDefault:UINib = UINib(nibName: "guidanceCell", bundle: nil)
-        self.guideTableView.register(nibDefault, forCellReuseIdentifier: "guidanceCell")
+        guideTableView.register(nibDefault, forCellReuseIdentifier: "guidanceCell")
     }
 
     //TableViewに関する設定一覧（セクション数）
@@ -104,12 +104,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     //データをリロードした際に読み込まれるメソッド
     func reloadData() {
-        self.guideTableView.reloadData()
+        guideTableView.reloadData()
     }
     
     //クイズ画面に遷移するアクション
     @IBAction func goQuizAction(_ sender: AnyObject) {
-        self.performSegue(withIdentifier: "goQuiz", sender: nil)
+        performSegue(withIdentifier: "goQuiz", sender: nil)
     }
     
     override func didReceiveMemoryWarning() {
