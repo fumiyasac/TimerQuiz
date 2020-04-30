@@ -101,6 +101,12 @@ public:
     void verify() const override;
     void to_dot(std::ostream&, StringData title) const override;
     void do_dump_node_structure(std::ostream&, int) const override;
+    void find_all(IntegerColumn&, BinaryData, size_t, size_t) const
+    {
+        // Dummy implementation
+        REALM_ASSERT(false);
+    }
+
 
 private:
     /// \param row_ndx Must be `realm::npos` if appending.
@@ -145,7 +151,7 @@ public:
     {
     }
 
-    BinaryIterator(BinaryColumn* col, size_t ndx)
+    BinaryIterator(const BinaryColumn* col, size_t ndx)
         : m_binary_col(col)
         , m_ndx(ndx)
     {
@@ -169,7 +175,7 @@ public:
 
 private:
     bool end_of_data = false;
-    BinaryColumn* m_binary_col = nullptr;
+    const BinaryColumn* m_binary_col = nullptr;
     size_t m_ndx = 0;
     size_t m_pos = 0;
     BinaryData m_binary;

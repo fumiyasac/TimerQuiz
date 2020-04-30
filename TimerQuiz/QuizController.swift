@@ -138,13 +138,13 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
     }
     
     //毎秒ごとのタイマーで呼び出されるメソッド
-    func perSecTimerDone() {
+    @objc func perSecTimerDone() {
         pastCounter -= 1
         timerDisplayLabel.text = "あと" + String(self.pastCounter) + "秒"
     }
     
     //問題の時間制限に到達した場合に実行されるメソッド
-    func timerDone() {
+    @objc func timerDone() {
         
         //10秒経過時は不正解として次の問題を読み込む
         totalSeconds = self.totalSeconds + QuizStruct.limitTimer
@@ -228,10 +228,10 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
         problemTextView.text = targetProblem[0] as! String
         
         //ボタンに選択肢を表示する
-        answerButtonOne.setTitle("1." + String(describing: targetProblem[2]), for: UIControlState())
-        answerButtonTwo.setTitle("2." + String(describing: targetProblem[3]), for: UIControlState())
-        answerButtonThree.setTitle("3." + String(describing: targetProblem[4]), for: UIControlState())
-        answerButtonFour.setTitle("4." + String(describing: targetProblem[5]), for: UIControlState())
+        answerButtonOne.setTitle("1." + String(describing: targetProblem[2]), for: UIControl.State())
+        answerButtonTwo.setTitle("2." + String(describing: targetProblem[3]), for: UIControl.State())
+        answerButtonThree.setTitle("3." + String(describing: targetProblem[4]), for: UIControl.State())
+        answerButtonFour.setTitle("4." + String(describing: targetProblem[5]), for: UIControl.State())
     }
     
     //選択された答えが正しいか誤りかを判定するメソッド
@@ -333,11 +333,11 @@ class QuizController: UIViewController, UINavigationControllerDelegate, UITextVi
             
             //遷移先のコントローラーの変数を用意する
             let scoreController = segue.destination as! ScoreController
-            
+
             //遷移先のコントローラーに渡したい変数を格納（型を合わせてね）
             scoreController.correctProblemNumber = correctProblemNumber
             scoreController.totalSeconds = NSString(format:"%.3f", totalSeconds) as String
-            
+
             //計算結果を入れる変数を初期化
             self.resetGameValues()
         }

@@ -28,30 +28,30 @@ import Realm
 
  :nodoc:
  **/
-public final class ObjectiveCSupport {
+public struct ObjectiveCSupport {
 
     /// Convert a `Results` to a `RLMResults`.
-    public static func convert<T>(object: Results<T>) -> RLMResults<RLMObject> {
+    public static func convert<T>(object: Results<T>) -> RLMResults<AnyObject> {
         return object.rlmResults
     }
 
     /// Convert a `RLMResults` to a `Results`.
-    public static func convert(object: RLMResults<RLMObject>) -> Results<Object> {
+    public static func convert(object: RLMResults<AnyObject>) -> Results<Object> {
         return Results(object)
     }
 
     /// Convert a `List` to a `RLMArray`.
-    public static func convert<T>(object: List<T>) -> RLMArray<RLMObject> {
+    public static func convert<T>(object: List<T>) -> RLMArray<AnyObject> {
         return object._rlmArray
     }
 
     /// Convert a `RLMArray` to a `List`.
-    public static func convert(object: RLMArray<RLMObject>) -> List<Object> {
+    public static func convert(object: RLMArray<AnyObject>) -> List<Object> {
         return List(rlmArray: object)
     }
 
     /// Convert a `LinkingObjects` to a `RLMResults`.
-    public static func convert<T>(object: LinkingObjects<T>) -> RLMResults<RLMObject> {
+    public static func convert<T>(object: LinkingObjects<T>) -> RLMResults<AnyObject> {
         return object.rlmResults
     }
 
@@ -130,13 +130,17 @@ public final class ObjectiveCSupport {
         return SortDescriptor(keyPath: object.keyPath, ascending: object.ascending)
     }
 
-    /// Convert a `SyncCredentials` to a `RLMSyncCredentials`.
-    public static func convert(object: SyncCredentials) -> RLMSyncCredentials {
-        return RLMSyncCredentials(object)
+    /// Convert a `RLMShouldCompactOnLaunchBlock` to a Realm Swift compact block.
+    public static func convert(object: @escaping RLMShouldCompactOnLaunchBlock) -> (Int, Int) -> Bool {
+        return { totalBytes, usedBytes in
+            return object(UInt(totalBytes), UInt(usedBytes))
+        }
     }
 
-    /// Convert a `RLMSyncCredentials` to a `SyncCredentials`.
-    public static func convert(object: RLMSyncCredentials) -> SyncCredentials {
-        return SyncCredentials(object)
+    /// Convert a Realm Swift compact block to a `RLMShouldCompactOnLaunchBlock`.
+    public static func convert(object: @escaping (Int, Int) -> Bool) -> RLMShouldCompactOnLaunchBlock {
+        return { totalBytes, usedBytes in
+            return object(Int(totalBytes), Int(usedBytes))
+        }
     }
 }

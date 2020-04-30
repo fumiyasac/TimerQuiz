@@ -24,7 +24,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-BOOL RLMPropertyTypeIsNullable(RLMPropertyType propertyType);
 BOOL RLMPropertyTypeIsComputed(RLMPropertyType propertyType);
 FOUNDATION_EXTERN void RLMValidateSwiftPropertyName(NSString *name);
 
@@ -49,8 +48,6 @@ static inline NSString *RLMTypeToString(RLMPropertyType type) {
             return @"any";
         case RLMPropertyTypeObject:
             return @"object";
-        case RLMPropertyTypeArray:
-            return @"array";
         case RLMPropertyTypeLinkingObjects:
             return @"linking objects";
     }
@@ -75,31 +72,23 @@ static inline NSString *RLMTypeToString(RLMPropertyType type) {
                                  property:(objc_property_t)property
                                  instance:(RLMObjectBase *)objectInstance;
 
-- (instancetype)initSwiftListPropertyWithName:(NSString *)name
-                                         ivar:(Ivar)ivar
-                              objectClassName:(nullable NSString *)objectClassName;
-
-- (instancetype)initSwiftOptionalPropertyWithName:(NSString *)name
-                                          indexed:(BOOL)indexed
-                                             ivar:(Ivar)ivar
-                                     propertyType:(RLMPropertyType)propertyType;
-
-- (instancetype)initSwiftLinkingObjectsPropertyWithName:(NSString *)name
-                                                   ivar:(Ivar)ivar
-                                        objectClassName:(nullable NSString *)objectClassName
-                                 linkOriginPropertyName:(nullable NSString *)linkOriginPropertyName;
+- (void)updateAccessors;
 
 // private setters
 @property (nonatomic, readwrite) NSString *name;
 @property (nonatomic, readwrite, assign) RLMPropertyType type;
 @property (nonatomic, readwrite) BOOL indexed;
 @property (nonatomic, readwrite) BOOL optional;
+@property (nonatomic, readwrite) BOOL array;
 @property (nonatomic, copy, nullable) NSString *objectClassName;
+@property (nonatomic, copy, nullable) NSString *linkOriginPropertyName;
 
 // private properties
+@property (nonatomic, readwrite, nullable) NSString *columnName;
 @property (nonatomic, assign) NSUInteger index;
 @property (nonatomic, assign) BOOL isPrimary;
-@property (nonatomic, assign) Ivar swiftIvar;
+@property (nonatomic, assign, nullable) Ivar swiftIvar;
+@property (nonatomic, assign, nullable) Class swiftAccessor;
 
 // getter and setter names
 @property (nonatomic, copy) NSString *getterName;
@@ -116,11 +105,11 @@ static inline NSString *RLMTypeToString(RLMPropertyType type) {
  This method is useful only in specialized circumstances, for example, in conjunction with
  +[RLMObjectSchema initWithClassName:objectClass:properties:]. If you are simply building an
  app on Realm, it is not recommened to use this method.
- 
+
  Initialize an RLMProperty
- 
+
  @warning This method is useful only in specialized circumstances.
- 
+
  @param name            The property name.
  @param type            The property type.
  @param objectClassName The object type used for Object and Array types.

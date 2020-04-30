@@ -18,14 +18,7 @@
 
 #import <Foundation/Foundation.h>
 
-
-@class RLMObjectSchema, RLMProperty, RLMObjectBase, RLMProperty;
-
-#ifdef __cplusplus
-typedef NSUInteger RLMCreationOptions;
-#else
-typedef NS_OPTIONS(NSUInteger, RLMCreationOptions);
-#endif
+@class RLMObjectSchema, RLMProperty, RLMObjectBase;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,10 +35,10 @@ Class RLMUnmanagedAccessorClassForObjectClass(Class objectClass, RLMObjectSchema
 //
 FOUNDATION_EXTERN void RLMDynamicValidatedSet(RLMObjectBase *obj, NSString *propName, id __nullable val);
 FOUNDATION_EXTERN id __nullable RLMDynamicGet(RLMObjectBase *obj, RLMProperty *prop);
-FOUNDATION_EXTERN id __nullable RLMDynamicGetByName(RLMObjectBase *obj, NSString *propName, bool asList);
+FOUNDATION_EXTERN id __nullable RLMDynamicGetByName(RLMObjectBase *obj, NSString *propName);
 
 // by property/column
-void RLMDynamicSet(RLMObjectBase *obj, RLMProperty *prop, id val, RLMCreationOptions options);
+void RLMDynamicSet(RLMObjectBase *obj, RLMProperty *prop, id val);
 
 //
 // Class modification

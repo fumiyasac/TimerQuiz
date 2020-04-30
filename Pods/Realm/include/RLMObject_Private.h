@@ -20,6 +20,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class RLMProperty, RLMArray;
+typedef NS_ENUM(int32_t, RLMPropertyType);
+
+FOUNDATION_EXTERN void RLMInitializeWithValue(RLMObjectBase *, id, RLMSchema *);
+
 // RLMObject accessor and read/write realm
 @interface RLMObjectBase () {
 @public
@@ -27,45 +32,15 @@ NS_ASSUME_NONNULL_BEGIN
     __unsafe_unretained RLMObjectSchema *_objectSchema;
 }
 
-// unmanaged initializer
-- (instancetype)initWithValue:(id)value schema:(RLMSchema *)schema NS_DESIGNATED_INITIALIZER;
-
-// live accessor initializer
-- (instancetype)initWithRealm:(__unsafe_unretained RLMRealm *const)realm
-                       schema:(RLMObjectSchema *)schema NS_DESIGNATED_INITIALIZER;
-
 // shared schema for this class
 + (nullable RLMObjectSchema *)sharedSchema;
 
-// provide injection point for alternative Swift object util class
-+ (Class)objectUtilClass:(BOOL)isSwift;
-
-@end
-
-@interface RLMObject ()
-
-// unmanaged initializer
-- (instancetype)initWithValue:(id)value schema:(RLMSchema *)schema NS_DESIGNATED_INITIALIZER;
-
-// live accessor initializer
-- (instancetype)initWithRealm:(__unsafe_unretained RLMRealm *const)realm
-                       schema:(RLMObjectSchema *)schema NS_DESIGNATED_INITIALIZER;
++ (nullable NSArray<RLMProperty *> *)_getPropertiesWithInstance:(id)obj;
++ (bool)_realmIgnoreClass;
 
 @end
 
 @interface RLMDynamicObject : RLMObject
-
-@end
-
-// A reference to an object's row that doesn't keep the object accessor alive.
-// Used by some Swift property types, such as LinkingObjects, to avoid retain cycles
-// with their containing object.
-@interface RLMWeakObjectHandle : NSObject<NSCopying>
-
-- (instancetype)initWithObject:(RLMObjectBase *)object;
-
-// Consumes the row, so can only usefully be called once.
-@property (nonatomic, readonly) RLMObjectBase *object;
 
 @end
 
@@ -81,24 +56,17 @@ typedef void (^RLMObjectNotificationCallback)(NSArray<NSString *> *_Nullable pro
                                               NSError *_Nullable error);
 FOUNDATION_EXTERN RLMNotificationToken *RLMObjectAddNotificationBlock(RLMObjectBase *obj, RLMObjectNotificationCallback block);
 
-// Get ObjectUil class for objc or swift
-FOUNDATION_EXTERN Class RLMObjectUtilClass(BOOL isSwift);
+// Returns whether the class is a descendent of RLMObjectBase
+FOUNDATION_EXTERN BOOL RLMIsObjectOrSubclass(Class klass);
+
+// Returns whether the class is an indirect descendant of RLMObjectBase
+FOUNDATION_EXTERN BOOL RLMIsObjectSubclass(Class klass);
 
 FOUNDATION_EXTERN const NSUInteger RLMDescriptionMaxDepth;
 
-@class RLMProperty, RLMArray;
-@interface RLMObjectUtil : NSObject
-
-+ (nullable NSArray<NSString *> *)ignoredPropertiesForClass:(Class)cls;
-+ (nullable NSArray<NSString *> *)indexedPropertiesForClass:(Class)cls;
-+ (nullable NSDictionary<NSString *, NSDictionary<NSString *, NSString *> *> *)linkingObjectsPropertiesForClass:(Class)cls;
-
-+ (nullable NSArray<NSString *> *)getGenericListPropertyNames:(id)obj;
-+ (nullable NSDictionary<NSString *, NSString *> *)getLinkingObjectsProperties:(id)object;
-
-+ (nullable NSDictionary<NSString *, NSNumber *> *)getOptionalProperties:(id)obj;
-+ (nullable NSArray<NSString *> *)requiredPropertiesForClass:(Class)cls;
-
+@interface RLMManagedPropertyAccessor : NSObject
++ (void)initializeObject:(void *)object parent:(RLMObjectBase *)parent property:(RLMProperty *)property;
++ (id)get:(void *)pointer;
 @end
 
 NS_ASSUME_NONNULL_END

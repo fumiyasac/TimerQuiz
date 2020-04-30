@@ -24,7 +24,15 @@ extern "C" {
 
 @class RLMRealm, RLMSchema, RLMObjectBase, RLMResults, RLMProperty;
 
+typedef NS_ENUM(NSUInteger, RLMUpdatePolicy) {
+    RLMUpdatePolicyError = 1,
+    RLMUpdatePolicyUpdateChanged = 3,
+    RLMUpdatePolicyUpdateAll = 2,
+};
+
 NS_ASSUME_NONNULL_BEGIN
+
+void RLMVerifyHasPrimaryKey(Class cls);
 
 //
 // Accessor Creation
@@ -35,28 +43,11 @@ void RLMRealmCreateAccessors(RLMSchema *schema);
 
 
 //
-// Options for object creation
-//
-typedef NS_OPTIONS(NSUInteger, RLMCreationOptions) {
-    // Normal object creation
-    RLMCreationOptionsNone = 0,
-    // If the property is a link or array property, upsert the linked objects
-    // if they have a primary key, and insert them otherwise.
-    RLMCreationOptionsCreateOrUpdate = 1 << 0,
-    // Allow unmanaged objects to be promoted to managed objects
-    // if false objects are copied during object creation
-    RLMCreationOptionsPromoteUnmanaged = 1 << 1,
-    // Use the SetDefault instruction.
-    RLMCreationOptionsSetDefault = 1 << 2,
-};
-
-
-//
 // Adding, Removing, Getting Objects
 //
 
 // add an object to the given realm
-void RLMAddObjectToRealm(RLMObjectBase *object, RLMRealm *realm, bool createOrUpdate);
+void RLMAddObjectToRealm(RLMObjectBase *object, RLMRealm *realm, RLMUpdatePolicy);
 
 // delete an object from its realm
 void RLMDeleteObjectFromRealm(RLMObjectBase *object, RLMRealm *realm);
@@ -72,16 +63,16 @@ NS_RETURNS_RETAINED;
 id _Nullable RLMGetObject(RLMRealm *realm, NSString *objectClassName, id _Nullable key) NS_RETURNS_RETAINED;
 
 // create object from array or dictionary
-RLMObjectBase *RLMCreateObjectInRealmWithValue(RLMRealm *realm, NSString *className, id _Nullable value, bool createOrUpdate)
+RLMObjectBase *RLMCreateObjectInRealmWithValue(RLMRealm *realm, NSString *className,
+                                               id _Nullable value, RLMUpdatePolicy updatePolicy)
 NS_RETURNS_RETAINED;
-    
 
 //
 // Accessor Creation
 //
 
 
-// switch List<> properties from being backed by unmanaged RLMArrays to RLMArrayLinkView
+// switch List<> properties from being backed by unmanaged RLMArrays to RLMManagedArray
 void RLMInitializeSwiftAccessorGenerics(RLMObjectBase *object);
 
 #ifdef __cplusplus
@@ -95,10 +86,8 @@ namespace realm {
 class RLMClassInfo;
 
 // Create accessors
-RLMObjectBase *RLMCreateObjectAccessor(RLMRealm *realm, RLMClassInfo& info,
-                                       NSUInteger index) NS_RETURNS_RETAINED;
-RLMObjectBase *RLMCreateObjectAccessor(RLMRealm *realm, RLMClassInfo& info,
-                                       realm::RowExpr row) NS_RETURNS_RETAINED;
+RLMObjectBase *RLMCreateObjectAccessor(RLMClassInfo& info, NSUInteger index) NS_RETURNS_RETAINED;
+RLMObjectBase *RLMCreateObjectAccessor(RLMClassInfo& info, realm::RowExpr row) NS_RETURNS_RETAINED;
 #endif
 
 NS_ASSUME_NONNULL_END

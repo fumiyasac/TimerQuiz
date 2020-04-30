@@ -65,7 +65,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //自動計算の場合は必要
         guideTableView.estimatedRowHeight = 48
-        guideTableView.rowHeight = UITableViewAutomaticDimension
+        guideTableView.rowHeight = UITableView.automaticDimension
         
         //Xibのクラスを読み込む
         let nibDefault:UINib = UINib(nibName: "guidanceCell", bundle: nil)
@@ -96,8 +96,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell!.guidanceDescription.text = guidanceData[1] as? String
         
         //セルのアクセサリタイプと背景の設定
-        cell!.accessoryType = UITableViewCellAccessoryType.none
-        cell!.selectionStyle = UITableViewCellSelectionStyle.none
+        cell!.accessoryType = UITableViewCell.AccessoryType.none
+        cell!.selectionStyle = UITableViewCell.SelectionStyle.none
         
         return cell!
     }

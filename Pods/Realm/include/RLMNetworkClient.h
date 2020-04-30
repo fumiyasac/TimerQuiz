@@ -20,38 +20,46 @@
 
 #import "RLMSyncUtil_Private.h"
 
-/**
- An enum describing all possible endpoints on the Realm Object Server.
- */
-typedef NS_ENUM(NSUInteger, RLMServerEndpoint) {
-    RLMServerEndpointAuth,
-    RLMServerEndpointLogout,
-    RLMServerEndpointAddCredentials,
-    RLMServerEndpointRemoveCredentials,
-};
-
-/**
- A simple Realm Object Server network client that wraps `NSURLSession`.
- */
-@interface RLMNetworkClient : NSObject
-
 NS_ASSUME_NONNULL_BEGIN
 
-+ (void)postRequestToEndpoint:(RLMServerEndpoint)endpoint
-                       server:(NSURL *)serverURL
-                         JSON:(NSDictionary *)jsonDictionary
-                   completion:(RLMSyncCompletionBlock)completionBlock;
+@interface RLMNetworkRequestOptions : NSObject
+@property (nonatomic, copy, nullable) NSString *authorizationHeaderName;
+@property (nonatomic, copy, nullable) NSDictionary<NSString *, NSString *> *customHeaders;
+@property (nullable, nonatomic, copy) NSDictionary<NSString *, NSURL *> *pinnedCertificatePaths;
+@end
 
-/**
- Post some JSON data to the authentication server, and asynchronously call a completion block with a JSON response
- and/or error.
- */
-+ (void)postRequestToEndpoint:(RLMServerEndpoint)endpoint
-                       server:(NSURL *)serverURL
-                         JSON:(NSDictionary *)jsonDictionary
-                      timeout:(NSTimeInterval)timeout
-                   completion:(RLMSyncCompletionBlock)completionBlock;
+/// An abstract class representing a server endpoint.
+@interface RLMSyncServerEndpoint : NSObject RLM_SYNC_UNINITIALIZABLE
++ (void)sendRequestToServer:(NSURL *)serverURL
+                       JSON:(NSDictionary *)jsonDictionary
+                 completion:(void (^)(NSError *))completionBlock;
+
++ (void)sendRequestToServer:(NSURL *)serverURL
+                       JSON:(NSDictionary *)jsonDictionary
+                    timeout:(NSTimeInterval)timeout
+                 completion:(void (^)(NSError *, NSDictionary *))completionBlock;
+@end
+
+@interface RLMSyncAuthEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+@interface RLMSyncChangePasswordEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+@interface RLMSyncUpdateAccountEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+@interface RLMSyncGetUserInfoEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+
+@interface RLMSyncGetPermissionsEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+@interface RLMSyncGetPermissionOffersEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+@interface RLMSyncApplyPermissionsEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+@interface RLMSyncOfferPermissionsEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+@interface RLMSyncAcceptPermissionOfferEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
+@interface RLMSyncInvalidatePermissionOfferEndpoint : RLMSyncServerEndpoint RLM_SYNC_UNINITIALIZABLE
+@end
 
 NS_ASSUME_NONNULL_END
-
-@end

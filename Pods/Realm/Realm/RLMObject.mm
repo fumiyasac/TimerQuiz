@@ -21,9 +21,10 @@
 #import "RLMAccessor.h"
 #import "RLMArray.h"
 #import "RLMCollection_Private.hpp"
+#import "RLMObjectBase_Private.h"
 #import "RLMObjectSchema_Private.hpp"
 #import "RLMObjectStore.h"
-#import "RLMProperty.h"
+#import "RLMProperty_Private.h"
 #import "RLMQueryUtil.hpp"
 #import "RLMRealm_Private.hpp"
 #import "RLMSchema_Private.h"
@@ -54,44 +55,42 @@
     return [super init];
 }
 
-- (instancetype)initWithValue:(id)value schema:(RLMSchema *)schema {
-    return [super initWithValue:value schema:schema];
-}
-
-- (instancetype)initWithRealm:(__unsafe_unretained RLMRealm *const)realm schema:(RLMObjectSchema *)schema {
-    return [super initWithRealm:realm schema:schema];
-}
-
 #pragma mark - Convenience Initializers
 
 - (instancetype)initWithValue:(id)value {
-    [self.class sharedSchema]; // ensure this class' objectSchema is loaded in the partialSharedSchema
-    RLMSchema *schema = RLMSchema.partialSharedSchema;
-    return [super initWithValue:value schema:schema];
+    if (!(self = [self init])) {
+        return nil;
+    }
+    RLMInitializeWithValue(self, value, RLMSchema.partialPrivateSharedSchema);
+    return self;
 }
 
 #pragma mark - Class-based Object Creation
 
 + (instancetype)createInDefaultRealmWithValue:(id)value {
-    return (RLMObject *)RLMCreateObjectInRealmWithValue([RLMRealm defaultRealm], [self className], value, false);
+    return (RLMObject *)RLMCreateObjectInRealmWithValue([RLMRealm defaultRealm], [self className], value, RLMUpdatePolicyError);
 }
 
 + (instancetype)createInRealm:(RLMRealm *)realm withValue:(id)value {
-    return (RLMObject *)RLMCreateObjectInRealmWithValue(realm, [self className], value, false);
+    return (RLMObject *)RLMCreateObjectInRealmWithValue(realm, [self className], value, RLMUpdatePolicyError);
 }
 
 + (instancetype)createOrUpdateInDefaultRealmWithValue:(id)value {
     return [self createOrUpdateInRealm:[RLMRealm defaultRealm] withValue:value];
 }
 
++ (instancetype)createOrUpdateModifiedInDefaultRealmWithValue:(id)value {
+    return [self createOrUpdateModifiedInRealm:[RLMRealm defaultRealm] withValue:value];
+}
+
 + (instancetype)createOrUpdateInRealm:(RLMRealm *)realm withValue:(id)value {
-    // verify primary key
-    RLMObjectSchema *schema = [self sharedSchema];
-    if (!schema.primaryKeyProperty) {
-        NSString *reason = [NSString stringWithFormat:@"'%@' does not have a primary key and can not be updated", schema.className];
-        @throw [NSException exceptionWithName:@"RLMExecption" reason:reason userInfo:nil];
-    }
-    return (RLMObject *)RLMCreateObjectInRealmWithValue(realm, [self className], value, true);
+    RLMVerifyHasPrimaryKey(self);
+    return (RLMObject *)RLMCreateObjectInRealmWithValue(realm, [self className], value, RLMUpdatePolicyUpdateAll);
+}
+
++ (instancetype)createOrUpdateModifiedInRealm:(RLMRealm *)realm withValue:(id)value {
+    RLMVerifyHasPrimaryKey(self);
+    return (RLMObject *)RLMCreateObjectInRealmWithValue(realm, [self className], value, RLMUpdatePolicyUpdateChanged);
 }
 
 #pragma mark - Subscripting
@@ -213,57 +212,43 @@
     return @[];
 }
 
++ (bool)_realmIgnoreClass {
+    return false;
+}
+
 @end
 
 @implementation RLMDynamicObject
+
++ (bool)_realmIgnoreClass {
+    return true;
+}
 
 + (BOOL)shouldIncludeInDefaultSchema {
     return NO;
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {
-    return RLMDynamicGetByName(self, key, false);
+    return RLMDynamicGetByName(self, key);
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
     RLMDynamicValidatedSet(self, key, value);
 }
 
-@end
-
-@implementation RLMWeakObjectHandle {
-    realm::Row _row;
-    RLMClassInfo *_info;
-    Class _objectClass;
-}
-
-- (instancetype)initWithObject:(RLMObjectBase *)object {
-    if (!(self = [super init])) {
-        return nil;
-    }
-
-    _row = object->_row;
-    _info = object->_info;
-    _objectClass = object.class;
-
-    return self;
-}
-
-- (RLMObjectBase *)object {
-    RLMObjectBase *object = RLMCreateManagedAccessor(_objectClass, _info->realm, _info);
-    object->_row = std::move(_row);
-    return object;
-}
-
-- (id)copyWithZone:(__unused NSZone *)zone {
-    RLMWeakObjectHandle *copy = [[RLMWeakObjectHandle alloc] init];
-    copy->_row = _row;
-    copy->_info = _info;
-    copy->_objectClass = _objectClass;
-    return copy;
++ (RLMObjectSchema *)sharedSchema {
+    return nil;
 }
 
 @end
+
+BOOL RLMIsObjectOrSubclass(Class klass) {
+    return RLMIsKindOfClass(klass, RLMObjectBase.class);
+}
+
+BOOL RLMIsObjectSubclass(Class klass) {
+    return RLMIsKindOfClass(class_getSuperclass(class_getSuperclass(klass)), RLMObjectBase.class);
+}
 
 @interface RLMObjectNotificationToken : RLMCancellationToken
 @end
@@ -277,7 +262,7 @@ RLMNotificationToken *RLMObjectAddNotificationBlock(RLMObjectBase *obj, RLMObjec
     if (!obj->_realm) {
         @throw RLMException(@"Only objects which are managed by a Realm support change notifications");
     }
-    [obj->_realm verifyNotificationsAreSupported];
+    [obj->_realm verifyNotificationsAreSupported:true];
 
     struct {
         void (^block)(NSArray<NSString *> *, NSArray *, NSArray *, NSError *);
@@ -370,7 +355,7 @@ RLMNotificationToken *RLMObjectAddNotificationBlock(RLMObjectBase *obj, RLMObjec
     } callback{block, obj};
 
     realm::Object object(obj->_realm->_realm, *obj->_info->objectSchema, obj->_row);
-    auto token = [[RLMObjectNotificationToken alloc] initWithToken:object.add_notification_block(callback) realm:obj->_realm];
+    auto token = [[RLMObjectNotificationToken alloc] initWithToken:object.add_notification_callback(callback) realm:obj->_realm];
     token->_object = std::move(object);
     return token;
 }

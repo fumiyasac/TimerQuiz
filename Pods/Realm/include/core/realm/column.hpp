@@ -21,6 +21,7 @@
 
 #include <cstdint> // unint8_t etc
 #include <cstdlib> // size_t
+#include <cmath>
 #include <vector>
 #include <memory>
 
@@ -34,6 +35,7 @@
 #include <realm/index_string.hpp>
 #include <realm/impl/destroy_guard.hpp>
 #include <realm/exceptions.hpp>
+#include <realm/table_ref.hpp>
 
 namespace realm {
 
@@ -90,7 +92,7 @@ public:
     ColumnRandIterator<ColumnDataType> operator--(int);
     ColumnRandIterator<ColumnDataType> operator+(ptrdiff_t movement);
     ColumnRandIterator<ColumnDataType> operator-(ptrdiff_t movement);
-    ptrdiff_t operator-(const ColumnRandIterator<ColumnDataType>& rawIterator);
+    ptrdiff_t operator-(const ColumnRandIterator<ColumnDataType>& right) const;
     const ColumnDataType operator*() const;
     const ColumnDataType operator->() const;
     const ColumnDataType operator[](ptrdiff_t offset) const;
@@ -276,7 +278,7 @@ public:
     /// the pointer to the subtable accessor at the specified row index if it
     /// exists, otherwise it returns null. For other column types, this function
     /// returns null.
-    virtual Table* get_subtable_accessor(size_t row_ndx) const noexcept;
+    virtual TableRef get_subtable_accessor(size_t row_ndx) const noexcept;
 
     /// Detach and remove the subtable accessor at the specified row if it
     /// exists. For column types that are unable to contain subtable, this
@@ -288,6 +290,7 @@ public:
     /// See Table::adj_acc_move_over()
     virtual void adj_acc_move_over(size_t from_row_ndx, size_t to_row_ndx) noexcept;
     virtual void adj_acc_swap_rows(size_t row_ndx_1, size_t row_ndx_2) noexcept;
+    virtual void adj_acc_move_row(size_t from_ndx, size_t to_ndx) noexcept;
     virtual void adj_acc_merge_rows(size_t old_row_ndx, size_t new_row_ndx) noexcept;
     virtual void adj_acc_clear_root_table() noexcept;
 
@@ -816,11 +819,6 @@ inline void ColumnBase::discard_child_accessors() noexcept
     do_discard_child_accessors();
 }
 
-inline Table* ColumnBase::get_subtable_accessor(size_t) const noexcept
-{
-    return 0;
-}
-
 inline void ColumnBase::discard_subtable_accessor(size_t) noexcept
 {
     // Noop
@@ -842,6 +840,11 @@ inline void ColumnBase::adj_acc_move_over(size_t, size_t) noexcept
 }
 
 inline void ColumnBase::adj_acc_swap_rows(size_t, size_t) noexcept
+{
+    // Noop
+}
+
+inline void ColumnBase::adj_acc_move_row(size_t, size_t) noexcept
 {
     // Noop
 }
@@ -880,6 +883,48 @@ int ColumnBase::compare_values(const Column* column, size_t row1, size_t row2) n
     auto a = column->get(row1);
     auto b = column->get(row2);
     return a == b ? 0 : a < b ? 1 : -1;
+}
+
+namespace _impl {
+template <int> struct IntTypeForSize;
+template <> struct IntTypeForSize<1> { using type = uint8_t; };
+template <> struct IntTypeForSize<2> { using type = uint16_t; };
+template <> struct IntTypeForSize<4> { using type = uint32_t; };
+template <> struct IntTypeForSize<8> { using type = uint64_t; };
+
+template <typename Float>
+int compare_float(Float a_raw, Float b_raw)
+{
+    bool a_nan = std::isnan(a_raw);
+    bool b_nan = std::isnan(b_raw);
+    if (!a_nan && !b_nan) {
+        // Just compare as IEEE floats
+        return a_raw == b_raw ? 0 : a_raw < b_raw ? 1 : -1;
+    }
+    if (a_nan && b_nan) {
+        // Compare the nan values (including nulls) as unsigned
+        using IntType = typename _impl::IntTypeForSize<sizeof(Float)>::type;
+        IntType a = 0, b = 0;
+        memcpy(&a, &a_raw, sizeof(Float));
+        memcpy(&b, &b_raw, sizeof(Float));
+        return a == b ? 0 : a < b ? 1 : -1;
+    }
+    // One is nan, the other is not
+    // nans are treated as being less than all non-nan values
+    return a_nan ? 1 : -1;
+}
+} // namespace _impl
+
+template <>
+inline int ColumnBase::compare_values<Column<float>>(const Column<float>* column, size_t row1, size_t row2) noexcept
+{
+    return _impl::compare_float(column->get(row1), column->get(row2));
+}
+
+template <>
+inline int ColumnBase::compare_values<Column<double>>(const Column<double>* column, size_t row1, size_t row2) noexcept
+{
+    return _impl::compare_float(column->get(row1), column->get(row2));
 }
 
 template <class T>
@@ -1811,9 +1856,9 @@ ColumnRandIterator<ColumnDataType> ColumnRandIterator<ColumnDataType>::operator-
 }
 
 template <class ColumnDataType>
-ptrdiff_t ColumnRandIterator<ColumnDataType>::operator-(const ColumnRandIterator<ColumnDataType>& other)
+ptrdiff_t ColumnRandIterator<ColumnDataType>::operator-(const ColumnRandIterator<ColumnDataType>& right) const
 {
-    return m_col_ndx - other.m_col_ndx;
+    return m_col_ndx - right.m_col_ndx;
 }
 
 template <class ColumnDataType>
